@@ -13,8 +13,10 @@ class User(AbstractUser):
         (ROLE_DOCTOR, _("Lekarz")),
         (ROLE_INTERN, _("Praktykant")),
     )
-    
-    role = models.PositiveSmallIntegerField(_("rola"), choices=ROLE_CHOICES, blank=False, null=False, default=ROLE_ADMIN)
+
+    role = models.PositiveSmallIntegerField(
+        _("rola"), choices=ROLE_CHOICES, blank=False, null=False, default=ROLE_ADMIN
+    )
 
     def __str__(self):
         return self.username
