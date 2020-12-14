@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %} 
     {% if "success" in request.GET %}
-        <p>Użytkownik utworzony</p>
+        <p>{& trans 'Użytkownik utworzony' %}</p>
     {% endif %}
-    <h2>Create user</h2>
+    <h2>{% trans 'Stwórz użytkownika' %}</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Create</button>
+        <button type="submit">{% trans 'Stwórz' %}</button>
     </form>
+    TODO: hasło lepiej wygenerować losowo i wysłać mailem, niż aby admin ręcznie komuś ustawiał
 {% endblock content %}
