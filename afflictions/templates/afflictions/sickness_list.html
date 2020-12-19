@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h1>{% trans 'Choroby' %}</h1>
+    <a href="{% url 'sickness_create' %}"><button>{% trans 'Dodaj' %}</button></a>
+    <ul>
+        {% for sickness in object_list %}
+            <li>
+                {{ sickness.name }}
+                <a href="{% url 'sickness_delete' pk=sickness.pk %}"><button>{% trans 'Usuń' %}</button>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -13,7 +13,9 @@
         <nav>
           <a href="{% url 'home'%}">{% trans 'Start' %}</a>
           &nbsp &nbsp &nbsp
-          <a href="{% url 'afflictions_list'%}">{% trans 'Objawy' %}</a>
+          <a href="{% url 'affliction_list'%}">{% trans 'Objawy' %}</a>
+          &nbsp &nbsp &nbsp
+          <a href="{% url 'sickness_list'%}">{% trans 'Choroby' %}</a>
         </nav>
       </div>
       {% endblock %}

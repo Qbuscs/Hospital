@@ -2,13 +2,13 @@
 {% load i18n %}
 
 {% block content %}
-    <h1>Afflictions</h1>
-    <a href="{% url 'afflictions_create' %}"><button>{% trans 'Dodaj' %}</button>
+    <h1>{% trans 'Objawy' %}</h1>
+    <a href="{% url 'affliction_create' %}"><button>{% trans 'Dodaj' %}</button></a>
     <ul>
         {% for affliction in object_list %}
             <li>
                 {{ affliction.name }}
-                <a href="{% url 'afflictions_delete' pk=affliction.pk %}"><button>{% trans 'Usuń' %}</button>
+                <a href="{% url 'affliction_delete' pk=affliction.pk %}"><button>{% trans 'Usuń' %}</button>
                 </a>
             </li>
         {% endfor %}
