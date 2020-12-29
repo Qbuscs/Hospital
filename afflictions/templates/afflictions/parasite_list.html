@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h1>{% trans 'Pasożyty' %}</h1>
+    <a href="{% url 'parasite_create' %}"><button>{% trans 'Dodaj' %}</button></a>
+    <ul>
+        {% for parasite in object_list %}
+            <li>
+                {{ parasite }}
+                <a href="{% url 'parasite_delete' pk=parasite.pk %}"><button>{% trans 'Usuń' %}</button></a>
+                <a href="{% url 'parasite_detail' pk=parasite.pk %}"><button>{% trans 'Podgląd' %}</button></a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

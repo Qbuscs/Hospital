@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h3>{{ object }}</h3>
+    <ul>
+    {% for affliction in object.afflictions.all %}
+        <li>{{ affliction }}</li>
+    {% endfor %}
+    </ul>
+    <a href="{% url 'parasite_list' %}"><button>{% trans 'Wróć' %}</button></a>
+{% endblock %}

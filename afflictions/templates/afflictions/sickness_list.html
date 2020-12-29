@@ -8,8 +8,8 @@
         {% for sickness in object_list %}
             <li>
                 {{ sickness.name }}
-                <a href="{% url 'sickness_delete' pk=sickness.pk %}"><button>{% trans 'Usuń' %}</button>
-                </a>
+                <a href="{% url 'sickness_delete' pk=sickness.pk %}"><button>{% trans 'Usuń' %}</button></a>
+                <a href="{% url 'sickness_detail' pk=sickness.pk %}"><button>{% trans 'Podgląd' %}</button></a>
             </li>
         {% endfor %}
     </ul>

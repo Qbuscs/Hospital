@@ -36,7 +36,12 @@ class Medicine(models.Model):
         verbose_name_plural = _("leki")
 
 
-# TODO: class MedicineSicknessExamination(models.Model)
+class MedicineExamination(models.Model):
+    medicine = models.ForeignKey(Medicine, verbose_name=_("lek"), on_delete=models.PROTECT)
+    examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), on_delete=models.CASCADE)
+    amount = models.FloatField(_("ilość"), null=True, blank=True)
+    # TODO: Może zrobic z tego choice field (mg, tabletek, kropli, itd.)?
+    unit = models.CharField(_("jednostka"), null=True, blank=True, max_length=50)
 
 
 class SicknessExamination(models.Model):

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h3>{{ object }}</h3>
+    <ul>
+        <li>#TODO: lista badań które używają leku?</li>
+    </ul>
+    <a href="{% url 'medicine_list' %}"><button>{% trans 'Wróć' %}</button></a>
+{% endblock %}

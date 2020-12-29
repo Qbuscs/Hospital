@@ -19,7 +19,7 @@ class DoctorMixin:
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect(reverse_lazy("login") + f"?next={request.path}")
-        if not request.user.role == User.ROLE_DOCTOR:
+        if request.user.role not in [User.ROLE_DOCTOR, User.ROLE_ADMIN]:
             raise PermissionDenied
         return super().dispatch(request, args, kwargs)
 
@@ -28,6 +28,6 @@ class InternMixin:
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect(reverse_lazy("login") + f"?next={request.path}")
-        if request.user.role not in [User.ROLE_DOCTOR, User.ROLE_INTERN]:
+        if request.user.role not in [User.ROLE_DOCTOR, User.ROLE_INTERN, User.ROLE_ADMIN]:
             raise PermissionDenied
         return super().dispatch(request, args, kwargs)

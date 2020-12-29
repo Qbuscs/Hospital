@@ -16,6 +16,10 @@
           <a href="{% url 'affliction_list'%}">{% trans 'Objawy' %}</a>
           &nbsp &nbsp &nbsp
           <a href="{% url 'sickness_list'%}">{% trans 'Choroby' %}</a>
+          &nbsp &nbsp &nbsp
+          <a href="{% url 'medicine_list'%}">{% trans 'Leki' %}</a>
+          &nbsp &nbsp &nbsp
+          <a href="{% url 'parasite_list'%}">{% trans 'Pasożyty' %}</a>
         </nav>
       </div>
       {% endblock %}
@@ -32,6 +36,7 @@
       </div>
       </br>
       {% endblock %}
+    <hr>
       {% block content %}
       {% endblock %}
   </main>
