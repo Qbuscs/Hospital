@@ -26,7 +26,7 @@ class UserCreateForm(forms.ModelForm):
 
 class ProfileEditForm(forms.ModelForm):
     password1 = forms.CharField(
-        max_length=50, required=True, widget=forms.PasswordInput(), label=gettext("Hasło")
+        max_length=50, required=True, widget=forms.PasswordInput(), label=gettext("Nowe hasło")
     )
     password2 = forms.CharField(
         max_length=50, required=True, widget=forms.PasswordInput(), label=gettext("Powtórz hasło")
