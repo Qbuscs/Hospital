@@ -3,15 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 from afflictions.models import (
     Affliction,
-    Sickness,
-    SicknessExamination,
-    Fungus,
-    FungusExamination,
     Parasite,
-    Medicine,
-    MedicineExamination
 )
-from animals.models import AnimalExamination, Animal
 
 
 class Patient(models.Model):
@@ -59,12 +52,8 @@ class Examination(models.Model):
         blank=False
     )
     date = models.DateField(_("data"), null=False)
-    animals = models.ManyToManyField(Animal, through=AnimalExamination, related_name="examinations")
-    afflictions = models.ManyToManyField(Affliction, verbose_name=_("objawy"), related_name="examinations")
-    sicknesses = models.ManyToManyField(Sickness, related_name="examinations", through=SicknessExamination)
-    fungi = models.ManyToManyField(Fungus, related_name="examinations", through=FungusExamination)
-    parasites = models.ManyToManyField(Parasite, related_name="examinations", verbose_name=_("pasożyty"))
-    medicines = models.ManyToManyField(Medicine, related_name="examinations", through=MedicineExamination)
+    afflictions = models.ManyToManyField(Affliction, verbose_name=_("objawy"), related_name="examinations", blank=True)
+    parasites = models.ManyToManyField(Parasite, related_name="examinations", verbose_name=_("pasożyty"), blank=True)
 
     # histopathological examinations
     collagen_layer_thickening = models.BooleanField(

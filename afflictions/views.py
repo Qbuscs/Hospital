@@ -1,8 +1,8 @@
-from django.views.generic import ListView, CreateView, DeleteView, DetailView
 from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, ListView
+from users.mixins import DoctorMixin, InternMixin
 
-from .models import Affliction, Sickness, Medicine, Parasite
-from users.mixins import InternMixin, DoctorMixin
+from .models import Affliction, Medicine, Parasite, Sickness
 
 
 class AfflictionCreateView(DoctorMixin, CreateView):

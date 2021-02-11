@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h3>{{ object }}</h3>
+    <p>TODO: zrobić to porządnie</p>
+    <a href="{% url 'examination_list' %}"><button>{% trans 'Wróć' %}</button></a>
+{% endblock %}

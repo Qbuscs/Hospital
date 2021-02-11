@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<!--TODO: Style do wyrzucenia-->
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
+    th > a > button {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+    <h1>{% trans 'Badania' %}</h1>
+    <a href="{% url 'examination_create' %}"><button>{% trans 'Dodaj' %}</button></a>
+    <table>
+        <tr>
+            <th>{% trans 'Pacjent' %}</th>
+            <th>{% trans 'Data' %}</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for examination in object_list %}
+            <tr>
+                <th>{{ examination.patient.first_name }} {{ examination.patient.last_name }}</th>
+                <th>{{ examination.date }}</th>
+                <th><a href="{% url 'examination_detail' pk=examination.pk %}"><button>{% trans 'Podgląd' %}</button></a></th>
+                <th><a href="{% url 'examination_delete' pk=examination.pk %}"><button>{% trans 'Usuń' %}</button></a></th>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core.models import Examination
+
 
 class Animal(models.Model):
     name = models.CharField(_("nazwa"), null=False, blank=False, max_length=200)
@@ -25,7 +27,7 @@ class AnimalExamination(models.Model):
     )
 
     animal = models.ForeignKey(Animal, verbose_name=_("zwierzę"), on_delete=models.CASCADE)
-    examination = models.ForeignKey("core.Examination", on_delete=models.CASCADE)
+    examination = models.ForeignKey(Examination, related_name="animals", on_delete=models.CASCADE)
     contact = models.PositiveSmallIntegerField(_("kontakt"), choices=CONTACT_CHOICES)
     saliva = models.BooleanField(_("kontakt ze śliną"), null=True, blank=True)
     excrement = models.BooleanField(_("kontakt z odchodami"), null=True, blank=True)

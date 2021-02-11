@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h1>{% trans 'Zwierzęta' %}</h1>
+    <a href="{% url 'animal_create' %}"><button>{% trans 'Dodaj' %}</button></a>
+    <ul>
+        {% for animal in object_list %}
+            <li>
+                {{ animal.name }}
+                <a href="{% url 'animal_delete' pk=animal.pk %}"><button>{% trans 'Usuń' %}</button></a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

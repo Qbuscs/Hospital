@@ -37,16 +37,20 @@ class Medicine(models.Model):
 
 
 class MedicineExamination(models.Model):
-    medicine = models.ForeignKey(Medicine, verbose_name=_("lek"), on_delete=models.PROTECT)
-    examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), on_delete=models.CASCADE)
+    medicine = models.ForeignKey(Medicine, verbose_name=_("lek"), related_name="examinations", on_delete=models.PROTECT)
+    examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), related_name="medicines", on_delete=models.CASCADE)
     amount = models.FloatField(_("ilość"), null=True, blank=True)
     # TODO: Może zrobic z tego choice field (mg, tabletek, kropli, itd.)?
     unit = models.CharField(_("jednostka"), null=True, blank=True, max_length=50)
 
 
 class SicknessExamination(models.Model):
-    sickness = models.ForeignKey(Sickness, verbose_name=_("choroba"), on_delete=models.PROTECT)
-    examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), on_delete=models.CASCADE)
+    sickness = models.ForeignKey(
+        Sickness, verbose_name=_("choroba"), related_name="examinations", on_delete=models.PROTECT
+    )
+    examination = models.ForeignKey(
+        "core.Examination", verbose_name=_("badanie"), related_name="sicknesses", on_delete=models.CASCADE
+    )
     antibiotics = models.BooleanField(_("Antybiotyko terapia"), null=True, blank=True)
 
     class Meta:
@@ -84,8 +88,8 @@ class Fungus(models.Model):
 
 
 class FungusExamination(models.Model):
-    fungus = models.ForeignKey(Fungus, verbose_name=_("grzyb"), on_delete=models.PROTECT)
-    examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), on_delete=models.CASCADE)
+    fungus = models.ForeignKey(Fungus, verbose_name=_("grzyb"), related_name="examinations", on_delete=models.PROTECT)
+    examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), related_name="fungi", on_delete=models.CASCADE)
     amount = models.FloatField(_("ilość"))
 
     class Meta:
