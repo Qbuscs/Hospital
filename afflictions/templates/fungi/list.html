@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h1>{% trans 'Grzyby' %}</h1>
+    <a href="{% url 'fungus_create' %}"><button>{% trans 'Dodaj' %}</button></a>
+    <table class="list">
+        <tr>
+            <th>{% trans 'Identyfikacja Molekularna' %}</th>
+            <th>{% trans 'Odporność na antybiotyki' %}</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for fungus in object_list %}
+            <tr>
+                <th>{{ fungus.molecular_identification }}</th>
+                <th>{{ fungus.get_antibiotics_resistance_display }}</th>
+                <th><a href="{% url 'fungus_detail' pk=fungus.pk %}"><button>{% trans 'Podgląd' %}</button></a></th>
+                <th><a href="{% url 'fungus_delete' pk=fungus.pk %}"><button>{% trans 'Usuń' %}</button></a></th>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

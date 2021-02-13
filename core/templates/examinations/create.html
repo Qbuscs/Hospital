@@ -1,11 +1,16 @@
 
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n crispy_forms_tags %}
 
 {% block content %}
-<form method="POST" enctype="multipart/form-data"> 
-    {% csrf_token %} 
-    {{ form.as_p }} 
-    <input type="submit" value="{% trans 'Dodaj' %}"> 
-</form>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            {% trans "Zarejestruj badanie" %}
+        </div>
+        <div class="card-body">
+            {% crispy form %}
+        </div>
+    </div>
+</div>
 {% endblock %}

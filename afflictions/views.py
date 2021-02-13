@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView
 from users.mixins import DoctorMixin, InternMixin
 
-from .models import Affliction, Medicine, Parasite, Sickness
+from .models import Affliction, Medicine, Parasite, Sickness, Fungus
 
 
 class AfflictionCreateView(DoctorMixin, CreateView):
@@ -90,3 +90,26 @@ class ParasiteDeleteView(DoctorMixin, DeleteView):
 class ParasiteDetailView(InternMixin, DetailView):
     template_name = "parasites/detail.html"
     model = Parasite
+
+
+class FungusCreateView(DoctorMixin, CreateView):
+    template_name = "fungi/create.html"
+    model = Fungus
+    fields = "__all__"
+    success_url = reverse_lazy("fungus_list")
+
+
+class FungusListView(InternMixin, ListView):
+    template_name = "fungi/list.html"
+    model = Fungus
+
+
+class FungusDeleteView(DoctorMixin, DeleteView):
+    template_name = "fungi/confirm_delete.html"
+    model = Fungus
+    success_url = reverse_lazy("fungus_list")
+
+
+class FungusDetailView(InternMixin, DetailView):
+    template_name = "fungi/detail.html"
+    model = Fungus

@@ -3,7 +3,7 @@
 
 {% block content %} 
     {% if "success" in request.GET %}
-        <p>{& trans 'Użytkownik utworzony' %}</p>
+        <p>{% trans 'Użytkownik utworzony' %}</p>
     {% endif %}
     <h2>{% trans 'Stwórz użytkownika' %}</h2>
     <form method="post">

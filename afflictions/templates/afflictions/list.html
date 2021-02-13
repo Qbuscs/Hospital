@@ -4,13 +4,16 @@
 {% block content %}
     <h1>{% trans 'Objawy' %}</h1>
     <a href="{% url 'affliction_create' %}"><button>{% trans 'Dodaj' %}</button></a>
-    <ul>
+    <table class="list">
+        <tr>
+            <th>{% trans 'Objaw' %}</th>
+            <th></th>
+        </tr>
         {% for affliction in object_list %}
-            <li>
-                {{ affliction.name }}
-                <a href="{% url 'affliction_delete' pk=affliction.pk %}"><button>{% trans 'Usuń' %}</button>
-                </a>
-            </li>
+            <tr>
+                <th>{{ affliction.name }}</th>
+                <th><a href="{% url 'affliction_delete' pk=affliction.pk %}"><button>{% trans 'Usuń' %}</button></a></th>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% endblock %}

@@ -7,6 +7,7 @@
   <meta charset="utf-8">
   <title>{% block title %}Hospital{% endblock %}</title>
   <script src="{% static 'js/jquery-3.5.1.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
   <main>
@@ -22,6 +23,8 @@
           <a href="{% url 'medicine_list'%}">{% trans 'Leki' %}</a>
           &nbsp &nbsp &nbsp
           <a href="{% url 'parasite_list'%}">{% trans 'Pasożyty' %}</a>
+          &nbsp &nbsp &nbsp
+          <a href="{% url 'fungus_list'%}">{% trans 'Grzyby' %}</a>
           &nbsp &nbsp &nbsp
           <a href="{% url 'patient_list'%}">{% trans 'Pacjenci' %}</a>
           &nbsp &nbsp &nbsp

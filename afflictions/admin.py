@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import Affliction, Sickness, SicknessExamination, Fungus, FungusExamination, Parasite
 
+
 class AfflictionAdmin(admin.ModelAdmin):
     list_display = ["name"]
 

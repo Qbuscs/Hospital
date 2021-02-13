@@ -1,10 +1,25 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
-    <h1>Users</h1>
-    <ul>
+    <h1>{% trans 'Użytkownicy' %}</h1>
+    <a href="{% url 'user_create' %}"><button>{% trans 'Dodaj' %}</button></a>
+    <table class="list">
+        <tr>
+            <th>{% trans 'Username' %}</th>
+            <th>{% trans 'Imię' %}</th>
+            <th>{% trans 'Nazwisko' %}</th>
+            <th>{% trans 'e-mail' %}</th>
+            <th>{% trans 'Stanowisko' %}</th>
+        </tr>
         {% for user in object_list %}
-            <li>{{ user.username }} - {{ user.get_role_display }}</li>
+            <tr>
+                <th>{{ user.username }}</th>
+                <th>{{ user.first_name }}</th>
+                <th>{{ user.last_name }}</th>
+                <th>{{ user.email }}</th>
+                <th>{{ user.get_role_display }}</th>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% endblock %}

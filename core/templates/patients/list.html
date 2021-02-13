@@ -2,33 +2,9 @@
 {% load i18n %}
 
 {% block content %}
-<!--TODO: Style do wyrzucenia-->
-<style>
-    table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-    }
-    
-    td, th {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
-    }
-    
-    tr:nth-child(even) {
-      background-color: #dddddd;
-    }
-
-    th > a > button {
-        width: 100%;
-        height: 100%;
-    }
-</style>
-
     <h1>{% trans 'Pacjenci' %}</h1>
     <a href="{% url 'patient_create' %}"><button>{% trans 'Dodaj' %}</button></a>
-    <table>
+    <table class="list">
         <tr>
             <th>{% trans 'Imię' %}</th>
             <th>{% trans 'Nazwisko' %}</th>

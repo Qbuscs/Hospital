@@ -1,4 +1,4 @@
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags static i18n %}
 <table>
 {{ formset.management_form|crispy }}
 
@@ -24,8 +24,8 @@
 <script src="{% static 'js/jquery.formset.js' %}"></script>
 <script type="text/javascript">
     $('.formset_row-{{ formset.prefix }}').formset({
-        addText: 'add another',
-        deleteText: 'remove',
+        addText: '{% trans "Dodaj kolejne" %}',
+        deleteText: '{% trans "Usuń" %}',
         prefix: '{{ formset.prefix }}',
     });
 </script>

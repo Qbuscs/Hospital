@@ -54,6 +54,7 @@ class Examination(models.Model):
     date = models.DateField(_("data"), null=False)
     afflictions = models.ManyToManyField(Affliction, verbose_name=_("objawy"), related_name="examinations", blank=True)
     parasites = models.ManyToManyField(Parasite, related_name="examinations", verbose_name=_("pasożyty"), blank=True)
+    note = models.TextField(_("Notatka"), max_length=1000, blank=True, null=True)
 
     # histopathological examinations
     collagen_layer_thickening = models.BooleanField(

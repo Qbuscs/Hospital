@@ -38,7 +38,12 @@ class Medicine(models.Model):
 
 class MedicineExamination(models.Model):
     medicine = models.ForeignKey(Medicine, verbose_name=_("lek"), related_name="examinations", on_delete=models.PROTECT)
-    examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), related_name="medicines", on_delete=models.CASCADE)
+    examination = models.ForeignKey(
+        "core.Examination",
+        verbose_name=_("badanie"),
+        related_name="medicines",
+        on_delete=models.CASCADE
+    )
     amount = models.FloatField(_("ilość"), null=True, blank=True)
     # TODO: Może zrobic z tego choice field (mg, tabletek, kropli, itd.)?
     unit = models.CharField(_("jednostka"), null=True, blank=True, max_length=50)
@@ -72,7 +77,13 @@ class Fungus(models.Model):
     # TODO: hodowla
     # TODO: gatunek
     # TODO: genotyp
-    afflictions = models.ManyToManyField(Affliction, verbose_name=_("objawy"), related_name="fungi")
+    afflictions = models.ManyToManyField(
+        Affliction,
+        verbose_name=_("objawy"),
+        related_name="fungi",
+        blank=True,
+        null=True
+    )
     molecular_identification = models.TextField(_("identyfikacja molekularna"), null=False, blank=False)
     antibiotics_resistance = models.PositiveSmallIntegerField(
         _("odporność na antybiotyki"),
@@ -90,7 +101,7 @@ class Fungus(models.Model):
 class FungusExamination(models.Model):
     fungus = models.ForeignKey(Fungus, verbose_name=_("grzyb"), related_name="examinations", on_delete=models.PROTECT)
     examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), related_name="fungi", on_delete=models.CASCADE)
-    amount = models.FloatField(_("ilość"))
+    amount = models.FloatField(_("ilość <#TODO: jaka jednostka?>"))
 
     class Meta:
         verbose_name = _("grzyb w badaniu")

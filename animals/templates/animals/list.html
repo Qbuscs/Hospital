@@ -4,12 +4,16 @@
 {% block content %}
     <h1>{% trans 'Zwierzęta' %}</h1>
     <a href="{% url 'animal_create' %}"><button>{% trans 'Dodaj' %}</button></a>
-    <ul>
+    <table class="list">
+        <tr>
+            <th>{% trans 'Nazwa' %}</th>
+            <th></th>
+        </tr>
         {% for animal in object_list %}
-            <li>
-                {{ animal.name }}
-                <a href="{% url 'animal_delete' pk=animal.pk %}"><button>{% trans 'Usuń' %}</button></a>
-            </li>
+            <tr>
+                <th>{{ animal.name }}</th>
+                <th><a href="{% url 'animal_delete' pk=animal.pk %}"><button>{% trans 'Usuń' %}</button></a></th>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% endblock %}

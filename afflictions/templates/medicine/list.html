@@ -4,13 +4,18 @@
 {% block content %}
     <h1>{% trans 'Leki' %}</h1>
     <a href="{% url 'medicine_create' %}"><button>{% trans 'Dodaj' %}</button></a>
-    <ul>
+    <table class="list">
+        <tr>
+            <th>{% trans 'Nazwa' %}</th>
+            <th></th>
+            <th></th>
+        </tr>
         {% for medicine in object_list %}
-            <li>
-                {{ medicine.name }}
-                <a href="{% url 'medicine_delete' pk=medicine.pk %}"><button>{% trans 'Usuń' %}</button></a>
-                <a href="{% url 'medicine_detail' pk=medicine.pk %}"><button>{% trans 'Podgląd' %}</button></a>
-            </li>
+            <tr>
+                <th>{{ medicine.name }}</th>
+                <th><a href="{% url 'medicine_detail' pk=medicine.pk %}"><button>{% trans 'Podgląd' %}</button></a></th>
+                <th><a href="{% url 'medicine_delete' pk=medicine.pk %}"><button>{% trans 'Usuń' %}</button></a></th>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% endblock %}
