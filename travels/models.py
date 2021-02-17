@@ -38,7 +38,7 @@ class Travel(models.Model):
         (VISIT_TOURISTIC, _("turystyczny")),
     )
 
-    examination = models.ForeignKey(Examination, on_delete=models.CASCADE, null=False)
+    examination = models.ForeignKey(Examination, related_name="travels", on_delete=models.CASCADE, null=False)
     country = CountryField(_("kraj"), null=False, blank=False)
     date_start = models.DateField(_("początek"), null=False)
     date_end = models.DateField(_("koniec"), null=False)

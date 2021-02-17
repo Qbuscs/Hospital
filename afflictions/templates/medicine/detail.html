@@ -7,4 +7,5 @@
         <li>#TODO: lista badań które używają leku?</li>
     </ul>
     <a href="{% url 'medicine_list' %}"><button>{% trans 'Wróć' %}</button></a>
+    <a href="{% url 'medicine_update' pk=object.pk %}"><button>{% trans 'Edytuj' %}</button></a>
 {% endblock %}

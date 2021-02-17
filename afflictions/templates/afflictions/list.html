@@ -8,10 +8,12 @@
         <tr>
             <th>{% trans 'Objaw' %}</th>
             <th></th>
+            <th></th>
         </tr>
         {% for affliction in object_list %}
             <tr>
                 <th>{{ affliction.name }}</th>
+                <th><a href="{% url 'affliction_update' pk=affliction.pk %}"><button>{% trans 'Edytuj' %}</button></a></th>
                 <th><a href="{% url 'affliction_delete' pk=affliction.pk %}"><button>{% trans 'Usuń' %}</button></a></th>
             </tr>
         {% endfor %}

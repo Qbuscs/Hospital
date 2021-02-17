@@ -9,6 +9,7 @@
         <li>{{ affliction }}</li>
     {% endfor %}
     </ul>
-    <p>{% trans "Odporność na antybiotyki" %}: {{ object.antibiotics_resistance }}</p>
+    <p>{% trans "Odporność na antybiotyki" %}: {{ object.get_antibiotics_resistance_display }}</p>
     <a href="{% url 'fungus_list' %}"><button>{% trans 'Wróć' %}</button></a>
+    <a href="{% url 'fungus_update' pk=object.pk %}"><button>{% trans 'Edytuj' %}</button></a>
 {% endblock %}

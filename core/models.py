@@ -47,6 +47,7 @@ class Examination(models.Model):
     patient = models.ForeignKey(
         Patient,
         verbose_name=_("pacjent"),
+        related_name="examinations",
         on_delete=models.PROTECT,
         null=False,
         blank=False

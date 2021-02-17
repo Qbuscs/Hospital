@@ -7,4 +7,5 @@ urlpatterns = [
     path("animals/", animal_views.AnimalListView.as_view(), name="animal_list"),
     path("animals/create/", animal_views.AnimalCreateView.as_view(), name="animal_create"),
     path("animals/<pk>/delete/", animal_views.AnimalDeleteView.as_view(), name="animal_delete"),
+    path("animals/<pk>/edit/", animal_views.AnimalUpdateView.as_view(), name="animal_update"),
 ]

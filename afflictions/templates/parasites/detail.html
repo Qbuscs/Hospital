@@ -9,4 +9,5 @@
     {% endfor %}
     </ul>
     <a href="{% url 'parasite_list' %}"><button>{% trans 'Wróć' %}</button></a>
+    <a href="{% url 'parasite_update' pk=object.pk %}"><button>{% trans 'Edytuj' %}</button></a>
 {% endblock %}

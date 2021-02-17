@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h3>{{ Pacjent }}</h3>
+    <p><span>{% trans "Imię i nazwisko" %}: </span>{{ object }}</p>
+    <p><span>{% trans "Płeć" %}: </span>{{ object.get_gender_display }}</p>
+    <p><span>{% trans "Wykształcenie" %}: </span>{{ object.get_education_display }}</p>
+    <p><span>{% trans "Badania" %}:</span></p>
+    <ul>
+    {% if object.examinations.exists %}
+        {% for examination in object.examinations.all %}
+            <li><a href="{% url 'examination_detail' pk=examination.pk %}">{{ examination }}</a></li>
+        {% endfor %}
+    {% else %}
+        <li>{% trans "Brak" %}</li>
+    {% endif %}
+    </ul>
+    <a href="{% url 'patient_list' %}"><button>{% trans 'Wróć' %}</button></a>
+    <a href="{% url 'patient_update' pk=object.pk %}"><button>{% trans 'Edytuj' %}</button></a>
+{% endblock %}

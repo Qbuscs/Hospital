@@ -1,8 +1,126 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n common %}
 
 {% block content %}
-    <h3>{{ object }}</h3>
-    <p>TODO: zrobić to porządnie</p>
+    <h3>{{ Badanie }}</h3>
+
+    <p><span>{% trans "Pacjent" %}: </span>{{ object.patient }}</p>
+
+    <p><span>{% trans "Data" %}: </span>{{ object.date }}</p>
+
+    <p><span>{% trans "Objawy" %}: </span></p>
+    <ul>
+        {% if object.afflictions.exists %}
+            {% for affliction in object.afflictions.all %}
+                <li>{{ affliction }}</li>
+            {% endfor %}
+        {% else %}
+        <li>{% trans "Brak" %}</li>
+        {% endif %}
+    </ul>
+
+    <p><span>{% trans "Pasożyty" %}: </span></p>
+    <ul>
+        {% if object.parasites.exists %}
+            {% for parasite in object.parasites.all %}
+                <li>{{ parasite }}</li>
+            {% endfor %}
+        {% else %}
+        <li>{% trans "Brak" %}</li>
+        {% endif %}
+    </ul>
+
+    <p><span>{% trans "Choroby" %}: </span></p>
+    <ul>
+        {% if object.sicknesses.exists %}
+            {% for sickness in object.sicknesses.all %}
+                <li>{{ sickness.sickness.name }} ({% trans "Antybiotyko terapia" %} - {{ sickenss.antibiotics }})</li>
+            {% endfor %}
+        {% else %}
+        <li>{% trans "Brak" %}</li>
+        {% endif %}
+    </ul>
+
+    <p><span>{% trans "Leki" %}: </span></p>
+    <ul>
+        {% if object.medicines.exists %}
+            {% for medicine in object.medicines.all %}
+                <li>{{ medicine.medicine.name }} ({{ medicine.amount }} {{ medicine.unit }})</li>
+            {% endfor %}
+        {% else %}
+        <li>{% trans "Brak" %}</li>
+        {% endif %}
+    </ul>
+
+    <p><span>{% trans "Grzyby" %}: </span></p>
+    <ul>
+        {% if object.fungi.exists %}
+            {% for fungus in object.fungi.all %}
+                <li>{{ fungus.fungus.name }} ({% trans "Ilość" %} - {{ fungus.amount }})</li>
+            {% endfor %}
+        {% else %}
+        <li>{% trans "Brak" %}</li>
+        {% endif %}
+    </ul>
+
+    <p><span>{% trans "Kontakty ze zwierzętami" %}: </span></p>
+    <ul>
+        {% if object.animals.exists %}
+            {% for animal in object.animals.all %}
+                <li>{{ animals.animal.name }}</li>
+                <ul>
+                    <li>{% trans "Kontakt" %} - {{ animal.get_contact_display }}</li>
+                    <li>{% trans "Kontakt ze śliną" %} - {{ animal.saliva }}</li>
+                    <li>{% trans "Kontakt z odchodami" %} - {{ animal.excrement }}</li>
+                </ul>
+            {% endfor %}
+        {% else %}
+        <li>{% trans "Brak" %}</li>
+        {% endif %}
+    </ul>
+
+    <p><span>{% trans "Podróże" %}: </span></p>
+    <ul>
+        {% if object.travels.exists %}
+            {% for travel in object.travels.all %}
+                <li>{{ travel.country.name }}</li>
+                <ul>
+                    <li>{% trans "Okres podrózy" %} - {{ travel.date_start }} {% trans "do" %} {{ travel.date_end }}</li>
+                    <li>{% trans "Odżywianie" %} - {{ travel.get_food_display }}</li>
+                    <li>{% trans "Napoje" %} - {{ travel.get_drinks_display }}</li>
+                    <li>{% trans "Rodzaj podróży" %} - {{ travel.get_visit_display }}</li>
+                </ul>
+            {% endfor %}
+        {% else %}
+        <li>{% trans "Brak" %}</li>
+        {% endif %}
+    </ul>
+
+    {% get_field_verbose_name object "collagen_layer_thickening" as label %}
+    {% bool_unknown label object.collagen_layer_thickening %}
+
+    {% get_field_verbose_name object "increased_intraepithelial_lymphocytes" as label %}
+    {% bool_unknown label object.increased_intraepithelial_lymphocytes %}
+
+    {% get_field_verbose_name object "lymphocytes_infiltration" as label %}
+    {% bool_unknown label object.lymphocytes_infiltration %}
+
+    {% get_field_verbose_name object "plasmocytes_infiltration" as label %}
+    {% bool_unknown label object.plasmocytes_infiltration %}
+
+    {% get_field_verbose_name object "eosinophils_infiltration" as label %}
+    {% bool_unknown label object.eosinophils_infiltration %}
+
+    {% get_field_verbose_name object "mast_cells_infiltration" as label %}
+    {% bool_unknown label object.mast_cells_infiltration %}
+
+    {% get_field_verbose_name object "neutrocytes_infiltration" as label %}
+    {% bool_unknown label object.neutrocytes_infiltration %}
+
+    <p><span>{% get_field_verbose_name object "note" %}: </span></p>
+    <p>{{ object.note }}</p>
+    
+
     <a href="{% url 'examination_list' %}"><button>{% trans 'Wróć' %}</button></a>
+    <a href="{% url 'examination_update' pk=object.pk %}"><button>{% trans 'Edytuj' %}</button></a>
 {% endblock %}

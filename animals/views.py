@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, ListView
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from users.mixins import DoctorMixin, InternMixin
 
 from .models import Animal
@@ -22,3 +22,9 @@ class AnimalDeleteView(DoctorMixin, DeleteView):
     model = Animal
     success_url = reverse_lazy("animal_list")
 
+
+class AnimalUpdateView(DoctorMixin, UpdateView):
+    template_name = "animals/create.html"
+    model = Animal
+    fields = ["name"]
+    success_url = reverse_lazy("animal_list")
