@@ -9,6 +9,7 @@
             <th>{% trans 'Imię' %}</th>
             <th>{% trans 'Nazwisko' %}</th>
             <th>{% trans 'Płeć' %}</th>
+            <th>{% trans 'Wiek' %}</th>
             <th>{% trans 'Wykształcenie' %}</th>
             <th></th>
             <th></th>
@@ -18,6 +19,7 @@
                 <th>{{ patient.first_name }}</th>
                 <th>{{ patient.last_name }}</th>
                 <th>{{ patient.get_gender_display }}</th>
+                <th>{{ patient.age }}</th>
                 <th>{{ patient.get_education_display }}</th>
                 <th><a href="{% url 'patient_detail' pk=patient.pk %}"><button>{% trans 'Podgląd' %}</button></a></th>
                 <th><a href="{% url 'patient_delete' pk=patient.pk %}"><button>{% trans 'Usuń' %}</button></a></th>

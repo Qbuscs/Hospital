@@ -5,6 +5,7 @@
     <h3>{{ Pacjent }}</h3>
     <p><span>{% trans "Imię i nazwisko" %}: </span>{{ object }}</p>
     <p><span>{% trans "Płeć" %}: </span>{{ object.get_gender_display }}</p>
+    <p><span>{% trans "Wiek" %}: </span>{{ object.age }} {% trans "lat" %}</p>
     <p><span>{% trans "Wykształcenie" %}: </span>{{ object.get_education_display }}</p>
     <p><span>{% trans "Badania" %}:</span></p>
     <ul>

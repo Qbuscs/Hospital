@@ -2,18 +2,10 @@
 {% load i18n %}
 
 {% block content %} 
-    {% if "success" in request.GET %}
-        <p>{% trans 'Zmiany Zapisane' %}</p>
-    {% endif %}
-    <h2>{% trans 'Profil' %}</h2>
-    <p>{% trans 'Login' %} - {{ user.username }}</p>
-    <p>{% trans 'Imię' %} - {{ user.first_name }}</p>
-    <p>{% trans 'Nazwisko' %} - {{ user.last_name }}</p>
-    <p>{% trans 'Email' %} - {{ user.email }}</p>
-    <p>{% trans 'Rola' %} - {{ user.get_role_display }}</p>
+    <h2>{% trans 'Zaktualizuj swoje dane' %}</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">{% trans 'Zmień hasło' %}</button>
+        <button type="submit">{% trans 'Zapisz' %}</button>
     </form>
 {% endblock content %}

@@ -10,6 +10,7 @@
             <th>{% trans 'Imię' %}</th>
             <th>{% trans 'Nazwisko' %}</th>
             <th>{% trans 'e-mail' %}</th>
+            <th>{% trans 'Telefon' %}</th>
             <th>{% trans 'Stanowisko' %}</th>
         </tr>
         {% for user in object_list %}
@@ -18,6 +19,11 @@
                 <th>{{ user.first_name }}</th>
                 <th>{{ user.last_name }}</th>
                 <th>{{ user.email }}</th>
+                {% if user.phone %}
+                    <th>{{ user.phone }}</th>
+                {% else %}
+                    <th></th>
+                {% endif %}
                 <th>{{ user.get_role_display }}</th>
             </tr>
         {% endfor %}

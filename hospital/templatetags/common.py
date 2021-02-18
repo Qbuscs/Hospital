@@ -1,5 +1,7 @@
 from django import template
 
+from users.models import User
+
 
 register = template.Library()
 
@@ -10,3 +12,9 @@ def bool_unknown(label, val):
 @register.simple_tag
 def get_field_verbose_name(instance, field_name):
     return instance._meta.get_field(field_name).verbose_name
+
+@register.simple_tag
+def is_admin(user):
+    if isinstance(user, User) and user.role == User.ROLE_ADMIN:
+        return True
+    return False

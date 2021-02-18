@@ -2,9 +2,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, FormView
+from django.views.generic import ListView, CreateView, FormView, TemplateView, UpdateView
 
-from users.forms import UserCreateForm, ProfileEditForm
+from users.forms import UserCreateForm, ChangePasswordForm
 from users.mixins import AdminMixin
 
 User = get_user_model()
@@ -31,21 +31,46 @@ class UserCreateView(AdminMixin, CreateView):
             return super().form_valid()
 
 
-class ProfileEditView(LoginRequiredMixin, FormView):
-    form_class = ProfileEditForm
-    success_url = reverse_lazy("login")
-    template_name = "profile_edit.html"
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = "profile_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        return context
+
+
+class ChangePasswordView(LoginRequiredMixin, FormView):
+    template_name = "change_password.html"
+    form_class = ChangePasswordForm
+    success_url = reverse_lazy("profile_detail")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
-        if form.is_valid:
+        if form.is_valid():
             password = form.cleaned_data.pop("password1")
             self.request.user.set_password(password)
             self.request.user.save()
             return redirect(self.success_url)
         else:
             return super().form_valid()
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
         return context
+
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    template_name = "profile_edit.html"
+    success_url = reverse_lazy("profile_detail")
+    fields = ["first_name", "last_name", "username", "email", "phone"]
+
+    def get_object(self, queryset=None):
+        return self.request.user
+

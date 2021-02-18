@@ -1,5 +1,4 @@
-{% load i18n %}
-{% load static %}
+{% load i18n static common %}
 
 <!DOCTYPE html>
 <html>
@@ -31,6 +30,11 @@
           <a href="{% url 'animal_list'%}">{% trans 'Zwierzęta' %}</a>
           &nbsp &nbsp &nbsp
           <a href="{% url 'examination_list'%}">{% trans 'Badania' %}</a>
+          {% is_admin user as admin %}
+          {% if admin %}
+          &nbsp &nbsp &nbsp
+          <a href="{% url 'users_list'%}">{% trans 'Użytkownicy' %}</a>
+          {% endif %}
         </nav>
       </div>
       {% endblock %}
@@ -39,7 +43,7 @@
         <nav>
         {% if user.is_authenticated %}
           <a href="{% url 'logout' %}">{% trans 'Wyloguj' %}</a>
-          <a href="{% url 'profile_edit' %}">{% trans 'Profil' %}</a>
+          <a href="{% url 'profile_detail' %}">{% trans 'Profil' %}</a>
         {% else %}
           <a href="{% url 'login' %}">{% trans 'Zaloguj' %}</a>
         {% endif %}

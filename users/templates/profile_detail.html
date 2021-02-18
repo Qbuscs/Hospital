@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %} 
+    {% if "success" in request.GET %}
+        <p>{% trans 'Zmiany Zapisane' %}</p>
+    {% endif %}
+    <h2>{% trans 'Profil' %}</h2>
+    <p>{% trans 'Login' %} - {{ user.username }}</p>
+    <p>{% trans 'Imię' %} - {{ user.first_name }}</p>
+    <p>{% trans 'Nazwisko' %} - {{ user.last_name }}</p>
+    <p>{% trans 'Email' %} - {{ user.email }}</p>
+    <p>{% trans 'Nr telefonu' %} - {{ user.phone }}</p>
+    <p>{% trans 'Rola' %} - {{ user.get_role_display }}</p>
+    <a href="{% url 'change_password' %}"><button>{% trans 'Zmień hasło' %}</button></a>
+    <a href="{% url 'profile_edit' %}"><button>{% trans 'Edytuj informacje' %}</button></a>
+{% endblock content %}

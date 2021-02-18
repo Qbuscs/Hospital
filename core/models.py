@@ -32,6 +32,7 @@ class Patient(models.Model):
 
     first_name = models.CharField(_("imię"), null=False, blank=False, max_length=200)
     last_name = models.CharField(_("nazwisko"), null=False, blank=False, max_length=200)
+    age = models.IntegerField(_("wiek"), null=False, blank=False)
     education = models.PositiveSmallIntegerField(_("wykształcenie"), choices=EDUCATION_CHOICES, null=False)
     gender = models.PositiveSmallIntegerField(_("płeć"), choices=GENDER_CHOICES, null=False)
 
