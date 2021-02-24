@@ -2,9 +2,33 @@
 {% load i18n %}
 
 {% block content %}
-{% if user.is_authenticated %}
-  <h1>{% trans "Witaj" %}, {{ user.username }}!</h1>
-{% else %}
-  <p>{% trans "Nie jesteś zalogowany" %}</p>
-{% endif %}
+<div class="jumbotron text-center">
+  {% if user.is_authenticated %}
+    <h1>{% trans "Witaj" %}, {{ user.username }}!</h1>
+  {% else %}
+    <p>{% trans "Nie jesteś zalogowany" %}</p>
+  {% endif %}
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-8">
+      <h5>Nie wiem co tutaj można finalnie dać</h5>
+      <p>Jakieś statystyki, może przejścia do widoków gdzie można fajnie analizować dane (mapy świata czy coś takiego)</p>
+      <h5>TODO list</h5>
+      <ul>
+        <li>Style (detail, edit, create views, profil, logowanie)</li>
+        <li>Pola grzybów</li>
+        <li>Morfologia w badaniach</li>
+        <li>Paginacja na widokach list</li>
+        <li>Filtrowanie na widokach list</li>
+        <li>Szukanie na widokach list</li>
+        <li>Mapa świata</li>
+        <li>Niektóre rzeczy nie tłumaczą się na polski (np. daty, prawda/fałsz)</li>
+        <li>Usuwanie użytkowników przez admina</li>
+      </ul>
+    </div>
+    <div class="col"></div>
+  </div>
+</div>
 {% endblock %}

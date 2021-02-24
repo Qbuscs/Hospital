@@ -2,20 +2,30 @@
 {% load i18n %}
 
 {% block content %}
-    <h1>{% trans 'Objawy' %}</h1>
-    <a href="{% url 'affliction_create' %}"><button>{% trans 'Dodaj' %}</button></a>
-    <table class="list">
-        <tr>
-            <th>{% trans 'Objaw' %}</th>
-            <th></th>
-            <th></th>
-        </tr>
+<div class="container">
+  <div class="row">
+    <div class="col-xl-12">
+      <h1>{% trans 'Objawy' %}</h1>
+      <a href="{% url 'affliction_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+      <table class="table table-striped table-sm my-2">
+        <thead class="thead-dark">
+          <tr>
+            <th>{% trans 'Nazwa' %}</th>
+            <th width="10%"></th>
+            <th width="10%"></th>
+          </tr>
+        </thead>
+        <tbody>
         {% for affliction in object_list %}
-            <tr>
-                <th>{{ affliction.name }}</th>
-                <th><a href="{% url 'affliction_update' pk=affliction.pk %}"><button>{% trans 'Edytuj' %}</button></a></th>
-                <th><a href="{% url 'affliction_delete' pk=affliction.pk %}"><button>{% trans 'Usuń' %}</button></a></th>
-            </tr>
+          <tr>
+            <th>{{ affliction.name }}</th>
+            <th><a href="{% url 'affliction_update' pk=affliction.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a></th>
+            <th><a href="{% url 'affliction_delete' pk=affliction.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a></th>
+          </tr>
         {% endfor %}
-    </table>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 {% endblock %}
