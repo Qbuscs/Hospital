@@ -1,6 +1,6 @@
 
 {% extends "base.html" %}
-{% load i18n crispy_forms_tags %}
+{% load i18n crispy_forms_tags common %}
 
 {% block content %}
 <div class="container">
@@ -13,4 +13,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{% select2ify "id_afflictions" %}
+{% select2ify "id_parasites" %}
 {% endblock %}

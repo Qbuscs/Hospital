@@ -1,11 +1,11 @@
 {% load crispy_forms_tags static i18n %}
-<table>
+<table class="table table-hover">
 {{ formset.management_form|crispy }}
 
     {% for form in formset.forms %}
             <tr class="{% cycle 'row1' 'row2' %} formset_row-{{ formset.prefix }}">
                 {% for field in form.visible_fields %}
-                <td>
+            <td style="padding-right: 10px; {% if forloop.last %}float: right;{% endif %}">
                     {# Include the hidden fields in the form #}
                     {% if forloop.first %}
                         {% for hidden in form.hidden_fields %}

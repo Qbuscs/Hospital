@@ -23,14 +23,28 @@ class ExaminationForm(forms.ModelForm):
             Div(
                 Field("patient"),
                 Field("date"),
-                Field("afflictions"),
-                Field("parasites"),
-                Fieldset(_("Choroby"), Formset("sicknesses")),
-                Fieldset(_("Leki"), Formset("medicines")),
-                Fieldset(_("Grzyby"), Formset("fungi")),
-                Fieldset(_("Kontakty ze zwierzętami"), Formset("animals")),
-                Fieldset(_("Podróże"), Formset("travels")),
-                #TODO: Rest of fields
+                Field("afflictions", style="width: 100%"),
+                Field("parasites", style="width: 100%"),
+                Div(
+                    Div(Fieldset(_("Choroby"), Formset("sicknesses")), css_class="card-body"),
+                    css_class="card"
+                ),
+                Div(
+                    Div(Fieldset(_("Grzyby"), Formset("fungi")), css_class="card-body"),
+                    css_class="card"
+                ),
+                Div(
+                    Div(Fieldset(_("Leki"), Formset("medicines")), css_class="card-body"),
+                    css_class="card"
+                ),
+                Div(
+                    Div(Fieldset(_("Kontakty ze zwierzętami"), Formset("animals")), css_class="card-body"),
+                    css_class="card"
+                ),
+                Div(
+                    Div(Fieldset(_("Podróże"), Formset("travels")), css_class="card-body table-responsive table-body"),
+                    css_class="card"
+                ),
                 Field("collagen_layer_thickening"),
                 Field("increased_intraepithelial_lymphocytes"),
                 Field("lymphocytes_infiltration"),
@@ -38,7 +52,7 @@ class ExaminationForm(forms.ModelForm):
                 Field("eosinophils_infiltration"),
                 Field("mast_cells_infiltration"),
                 Field("neutrocytes_infiltration"),
-                Field("note"),
+                Field("note", style="width: 100%"),
                 HTML("<br>"),
                 ButtonHolder(Submit("submit", _("Zapisz")))
             )

@@ -1,6 +1,10 @@
 {% extends "create_base.html" %}
-{% load common %}
+{% load common i18n %}
 
 {% block scripts %}
 {% select2ify "id_afflictions" %}
+{% endblock %}
+
+{% block card_header %}
+{% trans "Dodaj chorobę" %}
 {% endblock %}
