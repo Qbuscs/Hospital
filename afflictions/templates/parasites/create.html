@@ -1,11 +1,6 @@
+{% extends "create_base.html" %}
+{% load common %}
 
-{% extends "base.html" %}
-{% load i18n %}
-
-{% block content %}
-<form method="POST" enctype="multipart/form-data"> 
-    {% csrf_token %} 
-    {{ form.as_p }} 
-    <input type="submit" value="{% trans 'Zapisz' %}"> 
-</form>
+{% block scripts %}
+{% select2ify "id_afflictions" %}
 {% endblock %}

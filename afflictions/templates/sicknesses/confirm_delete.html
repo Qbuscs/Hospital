@@ -1,9 +1,1 @@
-{% extends "base.html" %}   
-{% load i18n %}
-
-{% block content %}
-    <form method="post">{% csrf_token %} 
-        <p>{% trans 'Czy napewno chcesz usunąć' %} "{{ object }}"?</p> 
-        <input type="submit" value="{% trans 'Tak' %}"> 
-    </form> 
-{% endblock content %}
+{% extends "confirm_delete_base.html" %}   

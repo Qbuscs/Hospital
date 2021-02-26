@@ -9,6 +9,10 @@ register = template.Library()
 def bool_unknown(label, val):
     return {"label": label, "val": val}
 
+@register.inclusion_tag("tags/select2ify.html")
+def select2ify(id):
+    return {"id": id}
+
 @register.simple_tag
 def get_field_verbose_name(instance, field_name):
     return instance._meta.get_field(field_name).verbose_name

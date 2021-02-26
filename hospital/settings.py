@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'phonenumber_field',
     'bootstrap4',
+
     'core',
     'animals',
     'travels',

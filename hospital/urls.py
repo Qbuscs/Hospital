@@ -20,9 +20,9 @@ from hospital.views import HomeView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", HomeView.as_view(), name="home"),
-    path("", include("core.urls")),
     path("users/", include("users.urls")),
     path("afflictions/", include("afflictions.urls")),
-    path("animals/", include("animals.urls"))
+    path("animals/", include("animals.urls")),
+    path("", HomeView.as_view(), name="home"),
+    path("", include("core.urls")),
 ]
