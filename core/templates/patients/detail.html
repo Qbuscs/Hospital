@@ -2,21 +2,37 @@
 {% load i18n %}
 
 {% block content %}
-    <h3>{{ Pacjent }}</h3>
-    <p><span>{% trans "Imię i nazwisko" %}: </span>{{ object }}</p>
-    <p><span>{% trans "Płeć" %}: </span>{{ object.get_gender_display }}</p>
-    <p><span>{% trans "Wiek" %}: </span>{{ object.age }} {% trans "lat" %}</p>
-    <p><span>{% trans "Wykształcenie" %}: </span>{{ object.get_education_display }}</p>
-    <p><span>{% trans "Badania" %}:</span></p>
-    <ul>
-    {% if object.examinations.exists %}
-        {% for examination in object.examinations.all %}
-            <li><a href="{% url 'examination_detail' pk=examination.pk %}">{{ examination }}</a></li>
-        {% endfor %}
-    {% else %}
-        <li>{% trans "Brak" %}</li>
-    {% endif %}
-    </ul>
-    <a href="{% url 'patient_list' %}"><button>{% trans 'Wróć' %}</button></a>
-    <a href="{% url 'patient_update' pk=object.pk %}"><button>{% trans 'Edytuj' %}</button></a>
+<div class="container">
+  <div class="row">
+    <div class="col-xl-12">
+    <h3>{% trans "Pacjent" %}</h3>
+    <p><span class="font-weight-bold">{% trans "Imię i nazwisko" %}: </span>{{ object }}</p>
+    <p><span class="font-weight-bold">{% trans "Płeć" %}: </span>{{ object.get_gender_display }}</p>
+    <p><span class="font-weight-bold">{% trans "Wiek" %}: </span>{{ object.age }} {% trans "lat" %}</p>
+    <p><span class="font-weight-bold">{% trans "Wykształcenie" %}: </span>{{ object.get_education_display }}</p>
+    <table class="table table-sm">
+      <thead class="thead-dark">
+        <tr>
+        <th>{% trans "Badania" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if not object.examinations.exists %}
+          <tr>
+            <td>{% trans "Brak" %}</td>
+          </tr>
+        {% else %}
+          {% for examination in object.examinations.all %}
+          <tr>
+            <td><a href="{% url 'examination_detail' pk=examination.pk %}">{{ examination.date }}</a></td>
+          </tr>
+          {% endfor %}
+        {% endif %}
+      </tbody>
+      </table>
+    <a href="{% url 'patient_list' %}"><button class="btn btn-secondary">{% trans 'Wróć' %}</button></a>
+    <a href="{% url 'patient_update' pk=object.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -6,5 +6,9 @@
 {% endblock %}
 
 {% block card_header %}
-{% trans "Dodaj grzyba" %}
+    {% if operation == "create" %}
+        {% trans "Dodaj grzyba" %}
+    {% elif operation == "edit" %}
+        {% trans "Edytuj grzyba" %}
+    {% endif %}
 {% endblock %}

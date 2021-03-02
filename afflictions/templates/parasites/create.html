@@ -6,5 +6,9 @@
 {% endblock %}
 
 {% block card_header %}
-{% trans "Dodaj pasożyta" %}
+    {% if operation == "create" %}
+        {% trans "Dodaj pasożyta" %}
+    {% elif operation == "edit" %}
+        {% trans "Edytuj pasożyta" %}
+    {% endif %}
 {% endblock %}

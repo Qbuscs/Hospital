@@ -11,6 +11,11 @@ class FungusCreateView(DoctorMixin, CreateView):
     fields = "__all__"
     success_url = reverse_lazy("fungus_list")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = "create"
+        return context
+
 
 class FungusUpdateView(DoctorMixin, UpdateView):
     template_name = "fungi/create.html"
@@ -19,6 +24,11 @@ class FungusUpdateView(DoctorMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("fungus_detail", kwargs={"pk": self.object})
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = "edit"
+        return context
 
 
 class FungusListView(InternMixin, ListView):

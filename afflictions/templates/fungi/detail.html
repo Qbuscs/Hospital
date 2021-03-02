@@ -2,14 +2,34 @@
 {% load i18n %}
 
 {% block content %}
-    <h3>{{ object }}</h3>
-    <p>{% trans "Objawy:" %}</p>
-    <ul> 
-    {% for affliction in object.afflictions.all %}
-        <li>{{ affliction }}</li>
-    {% endfor %}
-    </ul>
-    <p>{% trans "Odporność na antybiotyki" %}: {{ object.get_antibiotics_resistance_display }}</p>
-    <a href="{% url 'fungus_list' %}"><button>{% trans 'Wróć' %}</button></a>
-    <a href="{% url 'fungus_update' pk=object.pk %}"><button>{% trans 'Edytuj' %}</button></a>
+<div class="container">
+    <div class="row">
+      <div class="col-xl-12">
+        <h3>{{ object }}</h3>
+        <table class="table table-sm">
+        <thead class="thead-dark">
+            <tr>
+            <th>{% trans "Objawy" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if not object.afflictions.exists %}
+                <tr>
+                    <td>{% trans "Brak" %}</td>
+                </tr>
+            {% else %}
+                {% for affliction in object.afflictions.all %}
+                <tr>
+                    <td>{{ affliction }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+        </table>
+        <p><span class="font-weight-bold">{% trans "Odporność na antybiotyki" %}:</span> {{ object.get_antibiotics_resistance_display }}</p>
+        <a href="{% url 'fungus_list' %}"><button class="btn btn-secondary">{% trans 'Wróć' %}</button></a>
+        <a href="{% url 'fungus_update' pk=object.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a>
+        </div>
+    </div>
+</div>
 {% endblock %}

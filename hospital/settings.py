@@ -87,7 +87,8 @@ TEMPLATE_DIRS = (
 
 WSGI_APPLICATION = 'hospital.wsgi.application'
 
-
+DATE_FORMAT = "d E Y"
+DATE_INPUT_FORMATS = ["%d/%m/%Y"]
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -131,7 +132,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 

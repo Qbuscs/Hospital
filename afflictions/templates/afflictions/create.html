@@ -1,5 +1,9 @@
 {% extends "create_base.html" %}
 {% load i18n %}
 {% block card_header %}
-{% trans "Dodaj objaw" %}
+    {% if operation == "create" %}
+        {% trans "Dodaj objaw" %}
+    {% elif operation == "edit" %}
+        {% trans "Edytuj objaw" %}
+    {% endif %}
 {% endblock %}

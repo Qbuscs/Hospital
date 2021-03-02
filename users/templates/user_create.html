@@ -1,15 +1,6 @@
-{% extends 'base.html' %}
+{% extends "create_base.html" %}
 {% load i18n %}
 
-{% block content %} 
-    {% if "success" in request.GET %}
-        <p>{% trans 'Użytkownik utworzony' %}</p>
-    {% endif %}
-    <h2>{% trans 'Stwórz użytkownika' %}</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">{% trans 'Stwórz' %}</button>
-    </form>
-    TODO: hasło lepiej wygenerować losowo i wysłać mailem, niż aby admin ręcznie komuś ustawiał
-{% endblock content %}
+{% block card_header %}
+{% trans "Dodaj użytkownika TODO: hasło lepiej wygenerować losowo i wysłać mailem, niż aby admin ręcznie komuś ustawiał" %}
+{% endblock %}

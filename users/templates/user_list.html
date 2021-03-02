@@ -16,21 +16,27 @@
                 <th>{% trans 'e-mail' %}</th>
                 <th>{% trans 'Telefon' %}</th>
                 <th>{% trans 'Stanowisko' %}</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             {% for user in object_list %}
                 <tr>
-                    <th>{{ user.username }}</th>
-                    <th>{{ user.first_name }}</th>
-                    <th>{{ user.last_name }}</th>
-                    <th>{{ user.email }}</th>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.last_name }}</td>
+                    <td>{{ user.email }}</td>
                     {% if user.phone %}
-                        <th>{{ user.phone }}</th>
+                        <td>{{ user.phone }}</td>
                     {% else %}
-                        <th></th>
+                        <td></td>
                     {% endif %}
-                    <th>{{ user.get_role_display }}</th>
+                    <td>{{ user.get_role_display }}</td>
+                    {% if request.user == user %}
+                        <td></td>
+                    {% else %}
+                        <td><a href="{% url 'user_delete' pk=user.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>

@@ -42,9 +42,9 @@ class Travel(models.Model):
     country = CountryField(_("kraj"), null=False, blank=False)
     date_start = models.DateField(_("początek"), null=False)
     date_end = models.DateField(_("koniec"), null=False)
-    food = models.PositiveSmallIntegerField(_("odżywianie"), choices=FOOD_CHOICES, null=True)
-    drinks = models.PositiveSmallIntegerField(_("napoje"), choices=DRINKS_CHOICES, null=True)
-    visit = models.PositiveSmallIntegerField(_("rodzaj wizyty"), choices=VISIT_CHOICES, null=True)
+    food = models.PositiveSmallIntegerField(_("odżywianie"), choices=FOOD_CHOICES, null=True, blank=True)
+    drinks = models.PositiveSmallIntegerField(_("napoje"), choices=DRINKS_CHOICES, null=True, blank=True)
+    visit = models.PositiveSmallIntegerField(_("rodzaj wizyty"), choices=VISIT_CHOICES, null=True, blank=True)
 
     class Meta:
         verbose_name = _("podróż")

@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, FormView, TemplateView, UpdateView
+from django.views.generic import ListView, CreateView, FormView, TemplateView, UpdateView, DeleteView
 
 from users.forms import UserCreateForm, ChangePasswordForm
 from users.mixins import AdminMixin
@@ -17,7 +17,7 @@ class UserListView(ListView):
 
 class UserCreateView(AdminMixin, CreateView):
     form_class = UserCreateForm
-    success_url = reverse_lazy("user_create")
+    success_url = reverse_lazy("users_list")
     template_name = "user_create.html"
 
     def form_valid(self, form):
@@ -29,6 +29,12 @@ class UserCreateView(AdminMixin, CreateView):
             return redirect(self.success_url + "?success")
         else:
             return super().form_valid()
+
+
+class UserDeleteView(AdminMixin, DeleteView):
+    template_name = "confirm_delete.html"
+    model = User
+    success_url = reverse_lazy("users_list")
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):

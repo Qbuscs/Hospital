@@ -27,6 +27,11 @@ class PatientCreateView(DoctorMixin, CreateView):
     fields = "__all__"
     success_url = reverse_lazy("patient_list")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = "create"
+        return context
+
 
 class PatientDetailView(InternMixin, DetailView):
     template_name = "patients/detail.html"
@@ -42,6 +47,11 @@ class PatientUpdateView(DoctorMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("patient_detail", kwargs={"pk": self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = "edit"
+        return context
+
 
 class ExaminationListView(InternMixin, ListView):
     template_name = "examinations/list.html"
@@ -53,22 +63,6 @@ class ExaminationFormView:
     model = Examination
     success_url = reverse_lazy("examination_list")
     form_class = ExaminationForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context["sicknesses"] = SicknessExaminationFormSet(self.request.POST)
-            context["medicines"] = MedicineExaminationFormSet(self.request.POST)
-            context["fungi"] = FungusExaminationFormSet(self.request.POST)
-            context["animals"] = AnimalExaminationFormSet(self.request.POST)
-            context["travels"] = TravelFormSet(self.request.POST)
-        else:
-            context["sicknesses"] = SicknessExaminationFormSet(instance=self.object)
-            context["medicines"] = MedicineExaminationFormSet(instance=self.object)
-            context["fungi"] = FungusExaminationFormSet(instance=self.object)
-            context["animals"] = AnimalExaminationFormSet(instance=self.object)
-            context["travels"] = TravelFormSet(instance=self.object)
-        return context
 
     def form_valid(self, form):
         context = self.get_context_data()
@@ -87,11 +81,41 @@ class ExaminationFormView:
 
 
 class ExaminationCreateView(DoctorMixin, ExaminationFormView, CreateView):
-    pass
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context["sicknesses"] = SicknessExaminationFormSet(self.request.POST)
+            context["medicines"] = MedicineExaminationFormSet(self.request.POST)
+            context["fungi"] = FungusExaminationFormSet(self.request.POST)
+            context["animals"] = AnimalExaminationFormSet(self.request.POST)
+            context["travels"] = TravelFormSet(self.request.POST)
+        else:
+            context["sicknesses"] = SicknessExaminationFormSet()
+            context["medicines"] = MedicineExaminationFormSet()
+            context["fungi"] = FungusExaminationFormSet()
+            context["animals"] = AnimalExaminationFormSet()
+            context["travels"] = TravelFormSet()
+        context["operation"] = "create"
+        return context
 
 
 class ExaminationUpdateView(DoctorMixin, ExaminationFormView, UpdateView):
-    pass
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context["sicknesses"] = SicknessExaminationFormSet(self.request.POST, instance=self.object)
+            context["medicines"] = MedicineExaminationFormSet(self.request.POST, instance=self.object)
+            context["fungi"] = FungusExaminationFormSet(self.request.POST, instance=self.object)
+            context["animals"] = AnimalExaminationFormSet(self.request.POST, instance=self.object)
+            context["travels"] = TravelFormSet(self.request.POST, instance=self.object)
+        else:
+            context["sicknesses"] = SicknessExaminationFormSet(instance=self.object)
+            context["medicines"] = MedicineExaminationFormSet(instance=self.object)
+            context["fungi"] = FungusExaminationFormSet(instance=self.object)
+            context["animals"] = AnimalExaminationFormSet(instance=self.object)
+            context["travels"] = TravelFormSet(instance=self.object)
+        context["operation"] = "edit"
+        return context
 
 
 class ExaminationDeleteView(DoctorMixin, DeleteView):

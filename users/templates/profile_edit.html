@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n bootstrap4 %}
 
-{% block content %} 
-    <h2>{% trans 'Zaktualizuj swoje dane' %}</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">{% trans 'Zapisz' %}</button>
-    </form>
+{% block content %}
+<div class="container">
+    <div class="row">
+      <div class="col-xl-12">
+        <h2>{% trans 'Zaktualizuj swoje dane' %}</h2>
+        <form method="post" id="edit-form">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+        </form>
+        <a href="{% url 'profile_detail' %}"><button class="btn btn-secondary">{% trans 'Wróć' %}</button></a>
+        <button form="edit-form" type="submit" class="btn btn-primary">{% trans 'Zapisz' %}</button>
+        </div>
+    </div>
+</div>
 {% endblock content %}

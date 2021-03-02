@@ -6,5 +6,9 @@
 {% endblock %}
 
 {% block card_header %}
-{% trans "Dodaj chorobę" %}
+    {% if operation == "create" %}
+        {% trans "Dodaj chorobę" %}
+    {% elif operation == "edit" %}
+        {% trans "Edytuj chorobę" %}
+    {% endif %}
 {% endblock %}

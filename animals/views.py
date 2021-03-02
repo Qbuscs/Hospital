@@ -11,6 +11,11 @@ class AnimalCreateView(DoctorMixin, CreateView):
     fields = ["name"]
     success_url = reverse_lazy("animal_list")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = "create"
+        return context
+
 
 class AnimalListView(InternMixin, ListView):
     template_name = "animals/list.html"
@@ -28,3 +33,8 @@ class AnimalUpdateView(DoctorMixin, UpdateView):
     model = Animal
     fields = ["name"]
     success_url = reverse_lazy("animal_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = "edit"
+        return context

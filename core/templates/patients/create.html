@@ -2,5 +2,9 @@
 {% load i18n %}
 
 {% block card_header %}
-{% trans "Dodaj pacjenta" %}
+    {% if operation == "create" %}
+        {% trans "Dodaj pacjenta" %}
+    {% elif operation == "edit" %}
+        {% trans "Edytuj dane pacjenta" %}
+    {% endif %}
 {% endblock %}

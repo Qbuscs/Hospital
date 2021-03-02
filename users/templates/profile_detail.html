@@ -2,16 +2,22 @@
 {% load i18n %}
 
 {% block content %} 
-    {% if "success" in request.GET %}
-        <p>{% trans 'Zmiany Zapisane' %}</p>
-    {% endif %}
-    <h2>{% trans 'Profil' %}</h2>
-    <p>{% trans 'Login' %} - {{ user.username }}</p>
-    <p>{% trans 'Imię' %} - {{ user.first_name }}</p>
-    <p>{% trans 'Nazwisko' %} - {{ user.last_name }}</p>
-    <p>{% trans 'Email' %} - {{ user.email }}</p>
-    <p>{% trans 'Nr telefonu' %} - {{ user.phone }}</p>
-    <p>{% trans 'Rola' %} - {{ user.get_role_display }}</p>
-    <a href="{% url 'change_password' %}"><button>{% trans 'Zmień hasło' %}</button></a>
-    <a href="{% url 'profile_edit' %}"><button>{% trans 'Edytuj informacje' %}</button></a>
+<div class="container">
+    <div class="row">
+      <div class="col-xl-12">
+            {% if "success" in request.GET %}
+                <p>{% trans 'Zmiany Zapisane' %}</p>
+            {% endif %}
+            <h2>{% trans 'Profil' %}</h2>
+            <p><span class="font-weight-bold">{% trans 'Login' %}:</span> {{ user.username }}</p>
+            <p><span class="font-weight-bold">{% trans 'Imię' %}:</span> {{ user.first_name }}</p>
+            <p><span class="font-weight-bold">{% trans 'Nazwisko' %}:</span> {{ user.last_name }}</p>
+            <p><span class="font-weight-bold">{% trans 'Email' %}:</span> {{ user.email }}</p>
+            <p><span class="font-weight-bold">{% trans 'Nr telefonu' %}:</span> {{ user.phone }}</p>
+            <p><span class="font-weight-bold">{% trans 'Rola' %}:</span> {{ user.get_role_display }}</p>
+            <a href="{% url 'change_password' %}"><button class="btn btn-primary">{% trans 'Zmień hasło' %}</button></a>
+            <a href="{% url 'profile_edit' %}"><button class="btn btn-primary">{% trans 'Edytuj informacje' %}</button></a>
+            </div>
+        </div>
+</div>
 {% endblock content %}

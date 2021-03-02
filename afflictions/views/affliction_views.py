@@ -11,12 +11,22 @@ class AfflictionCreateView(DoctorMixin, CreateView):
     fields = ["name"]
     success_url = reverse_lazy("affliction_list")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = "create"
+        return context
+
 
 class AfflictionUpdateView(DoctorMixin, UpdateView):
     template_name = "afflictions/create.html"
     model = Affliction
     fields = ["name"]
     success_url = reverse_lazy("affliction_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = "edit"
+        return context
 
 
 class AfflictionListView(InternMixin, ListView):

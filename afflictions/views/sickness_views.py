@@ -11,6 +11,11 @@ class SicknessCreateView(DoctorMixin, CreateView):
     fields = ["name", "afflictions"]
     success_url = reverse_lazy("sickness_list")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = "create"
+        return context
+
 
 class SicknessUpdateView(DoctorMixin, UpdateView):
     template_name = "sicknesses/create.html"
@@ -19,6 +24,11 @@ class SicknessUpdateView(DoctorMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("sickness_detail", kwargs={"pk": self.object.pk})
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = "edit"
+        return context
 
 
 class SicknessListView(InternMixin, ListView):
