@@ -3,6 +3,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from users.mixins import DoctorMixin, InternMixin
 
 from afflictions.models import Affliction
+from hospital.mixins import OrderableMixin
 
 
 class AfflictionCreateView(DoctorMixin, CreateView):
@@ -29,7 +30,7 @@ class AfflictionUpdateView(DoctorMixin, UpdateView):
         return context
 
 
-class AfflictionListView(InternMixin, ListView):
+class AfflictionListView(InternMixin, OrderableMixin, ListView):
     template_name = "afflictions/list.html"
     model = Affliction
 

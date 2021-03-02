@@ -1,0 +1,60 @@
+{% load i18n %}
+
+<th id="{{name}}_header" class="no-sort" {% if width %}width={{width}}{% endif %}>
+<a onclick="toggle_{{name}}()" ><button class="btn text-light">
+        {% trans label %}
+        <i class="fa fa-caret-right" aria-hidden="true"></i>
+    </button></a>
+</th>
+
+<script>
+
+    $ (document).ready( function() {
+        ordering = (new URL(document.location)).searchParams.get("order_by");
+        if(ordering){
+            ordering = ordering.split(',');
+            ordering.forEach(order => {
+                if (order == "{{name}}"){
+                    $("#{{name}}_header").attr("class", "asc-sort");
+                    $("#{{name}}_header").find("i").attr("class", "fa fa-caret-up");
+                }
+                if (order == "-{{name}}"){
+                    $("#{{name}}_header").attr("class", "desc-sort");
+                    $("#{{name}}_header").find("i").attr("class", "fa fa-caret-down");
+                }
+            });
+        }
+    });
+
+    function replaceQueryParam(param, newval, search) {
+        var regex = new RegExp("([?;&])" + param + "[^&;]*[;&]?");
+        var query = search.replace(regex, "$1").replace(/&$/, '');
+        return (query.length > 2 ? query + "&" : "?") + (newval ? param + "=" + newval : '');
+    }
+
+    function toggle_{{name}}(){
+        var header = $("#{{name}}_header");
+        var current_class = header.attr("class");
+        var order_by = null;
+        if(current_class == "no-sort") {
+            order_by = "{{name}}";
+        } else if(current_class == "asc-sort") {
+            order_by = "-{{name}}";
+        }
+        else {
+            order_by = null;
+        }
+        ordering = (new URL(document.location)).searchParams.get("order_by");
+        if(ordering){
+            ordering = ordering.split(',');
+            ordering = ordering.filter(e => e !== "{{name}}" && e !== "-{{name}}" && e !== "");
+            ordering.push(order_by);
+            ordering = ordering.toString();
+        }
+        else {
+            ordering = order_by
+        }
+        console.log(ordering);
+        window.location = replaceQueryParam("order_by", ordering, window.location.search);
+    }
+</script>

@@ -1,16 +1,20 @@
-from django.db import transaction
-from django.views.generic import ListView, CreateView, DeleteView, DetailView, UpdateView
-from django.urls import reverse_lazy
-
-from .models import Patient, Examination
-from .forms import ExaminationForm
-from afflictions.forms import SicknessExaminationFormSet, MedicineExaminationFormSet, FungusExaminationFormSet
+from afflictions.forms import (FungusExaminationFormSet,
+                               MedicineExaminationFormSet,
+                               SicknessExaminationFormSet)
 from animals.forms import AnimalExaminationFormSet
+from django.db import transaction
+from django.urls import reverse_lazy
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
+from hospital.mixins import OrderableMixin
 from travels.forms import TravelFormSet
-from users.mixins import InternMixin, DoctorMixin
+from users.mixins import DoctorMixin, InternMixin
+
+from .forms import ExaminationForm
+from .models import Examination, Patient
 
 
-class PatientListView(InternMixin, ListView):
+class PatientListView(InternMixin, OrderableMixin, ListView):
     template_name = "patients/list.html"
     model = Patient
 
@@ -53,7 +57,7 @@ class PatientUpdateView(DoctorMixin, UpdateView):
         return context
 
 
-class ExaminationListView(InternMixin, ListView):
+class ExaminationListView(InternMixin, OrderableMixin, ListView):
     template_name = "examinations/list.html"
     model = Examination
 

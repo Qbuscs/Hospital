@@ -13,6 +13,10 @@ def bool_unknown(label, val):
 def select2ify(id):
     return {"id": id}
 
+@register.inclusion_tag("tags/orderable_header.html")
+def orderable_header(name, label, width=None):
+    return {"name": name, "label": label, "width": width}
+
 @register.simple_tag
 def get_field_verbose_name(instance, field_name):
     return instance._meta.get_field(field_name).verbose_name
