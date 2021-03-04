@@ -3,7 +3,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from users.mixins import DoctorMixin, InternMixin
 
 from .models import Animal
-from hospital.mixins import OrderableMixin
+from hospital.mixins import OrderableMixin, SearchableMixin
 
 
 class AnimalCreateView(DoctorMixin, CreateView):
@@ -18,9 +18,10 @@ class AnimalCreateView(DoctorMixin, CreateView):
         return context
 
 
-class AnimalListView(InternMixin, OrderableMixin, ListView):
+class AnimalListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "animals/list.html"
     model = Animal
+    search_fields = ["name"]
 
 
 class AnimalDeleteView(DoctorMixin, DeleteView):

@@ -3,7 +3,7 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 from users.mixins import DoctorMixin, InternMixin
 
 from afflictions.models import Parasite
-from hospital.mixins import OrderableMixin
+from hospital.mixins import OrderableMixin, SearchableMixin
 
 
 class ParasiteCreateView(DoctorMixin, CreateView):
@@ -33,9 +33,10 @@ class ParasiteUpdateView(DoctorMixin, UpdateView):
         return context
 
 
-class ParasiteListView(InternMixin, OrderableMixin, ListView):
+class ParasiteListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "parasites/list.html"
     model = Parasite
+    search_fields = ["name"]
 
 
 class ParasiteDeleteView(DoctorMixin, DeleteView):

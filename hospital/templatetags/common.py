@@ -17,6 +17,10 @@ def select2ify(id):
 def orderable_header(name, label, width=None):
     return {"name": name, "label": label, "width": width}
 
+@register.inclusion_tag("tags/search_form.html")
+def search_form(form):
+    return {"form": form}
+
 @register.simple_tag
 def get_field_verbose_name(instance, field_name):
     return instance._meta.get_field(field_name).verbose_name

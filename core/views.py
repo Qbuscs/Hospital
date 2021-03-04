@@ -4,9 +4,10 @@ from afflictions.forms import (FungusExaminationFormSet,
 from animals.forms import AnimalExaminationFormSet
 from django.db import transaction
 from django.urls import reverse_lazy
+from django.utils.translation import gettext
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
-from hospital.mixins import OrderableMixin
+from hospital.mixins import OrderableMixin, SearchableMixin
 from travels.forms import TravelFormSet
 from users.mixins import DoctorMixin, InternMixin
 
@@ -14,9 +15,10 @@ from .forms import ExaminationForm
 from .models import Examination, Patient
 
 
-class PatientListView(InternMixin, OrderableMixin, ListView):
+class PatientListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "patients/list.html"
     model = Patient
+    search_fields = ["first_name", "last_name", "gender", "age", "education"]
 
 
 class PatientDeleteView(DoctorMixin, DeleteView):
@@ -57,9 +59,21 @@ class PatientUpdateView(DoctorMixin, UpdateView):
         return context
 
 
-class ExaminationListView(InternMixin, OrderableMixin, ListView):
+class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "examinations/list.html"
     model = Examination
+    search_fields = ["date"]
+
+    def get_extra_search_fields(self):
+        first_name_field = Patient._meta.get_field("first_name").formfield()
+        last_name_field = Patient._meta.get_field("last_name").formfield()
+        first_name_field.label = gettext("Imię pacjenta")
+        last_name_field.label = gettext("Nazwisko pacjenta")
+        return {"patient__first_name": first_name_field, "patient__last_name": last_name_field}
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.select_related("patient")
 
 
 class ExaminationFormView:

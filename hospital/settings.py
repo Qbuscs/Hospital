@@ -28,6 +28,9 @@ SECRET_KEY = 'vu#=sc87(-sk8k@m!k7xakryxtk@()s41yqnkgu9g^w%5c1wp^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
@@ -44,6 +47,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'phonenumber_field',
     'bootstrap4',
+    'debug_toolbar',
 
     'core',
     'animals',
@@ -61,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'hospital.urls'
@@ -122,6 +127,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

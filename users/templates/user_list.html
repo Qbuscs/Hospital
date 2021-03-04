@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n common %}
 
 {% block content %}
 <div class="container">
@@ -7,15 +7,18 @@
       <div class="col-xl-12">
         <h1>{% trans 'Użytkownicy' %}</h1>
         <a href="{% url 'user_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+
+        {% search_form search_form %}
+
         <table class="table table-striped table-sm my-2">
             <thead class="thead-dark">
             <tr>
-                <th>{% trans 'Username' %}</th>
-                <th>{% trans 'Imię' %}</th>
-                <th>{% trans 'Nazwisko' %}</th>
-                <th>{% trans 'e-mail' %}</th>
-                <th>{% trans 'Telefon' %}</th>
-                <th>{% trans 'Stanowisko' %}</th>
+                {% orderable_header "username" "Username" %}
+                {% orderable_header "first_name" "Imię" %}
+                {% orderable_header "last_name" "Nazwisko" %}
+                {% orderable_header "email" "E-mail" %}
+                {% orderable_header "phone" "Telefon" %}
+                {% orderable_header "role" "Stanowisko" %}
                 <th></th>
             </tr>
             </thead>

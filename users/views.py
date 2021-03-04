@@ -2,17 +2,20 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, FormView, TemplateView, UpdateView, DeleteView
+from django.views.generic import (CreateView, DeleteView, FormView, ListView,
+                                  TemplateView, UpdateView)
+from hospital.mixins import OrderableMixin, SearchableMixin
 
-from users.forms import UserCreateForm, ChangePasswordForm
+from users.forms import ChangePasswordForm, UserCreateForm
 from users.mixins import AdminMixin
 
 User = get_user_model()
 
 
-class UserListView(ListView):
+class UserListView(OrderableMixin, SearchableMixin, AdminMixin, ListView):
     model = User
     template_name = "user_list.html"
+    search_fields = ["username", "first_name", "last_name", "email", "phone", "role"]
 
 
 class UserCreateView(AdminMixin, CreateView):
@@ -64,7 +67,7 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
             return redirect(self.success_url)
         else:
             return super().form_valid()
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
@@ -79,4 +82,3 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-

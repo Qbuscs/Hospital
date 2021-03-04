@@ -11,7 +11,9 @@
 
         <p><span class="font-weight-bold">{% trans "Data" %}: </span>{{ object.date }}</p>
 
-        <p><span class="font-weight-bold">{% trans "Objawy" %}: </span></p>
+        <p><span class="font-weight-bold">{% trans "Objawy" %}: </span>
+          {% if not object.afflictions.exists %}{% trans "Brak" %}</p>
+          {% else %}</p>
         <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
@@ -19,21 +21,18 @@
               </tr>
             </thead>
             <tbody>
-              {% if not object.afflictions.exists %}
-                  <tr>
-                      <td>{% trans "Brak" %}</td>
-                  </tr>
-              {% else %}
                   {% for affliction in object.afflictions.all %}
                   <tr>
                       <td>{{ affliction }}</td>
                   </tr>
                   {% endfor %}
-              {% endif %}
             </tbody>
           </table>
+          {% endif %}
 
-          <p><span class="font-weight-bold">{% trans "Pasożyty" %}: </span></p>
+          <p><span class="font-weight-bold">{% trans "Pasożyty" %}: </span>
+            {% if not object.parasites.exists %}{% trans "Brak" %}</p>
+            {% else %}</p>
           <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
@@ -41,21 +40,18 @@
               </tr>
             </thead>
             <tbody>
-              {% if not object.paristes.exists %}
-                  <tr>
-                      <td>{% trans "Brak" %}</td>
-                  </tr>
-              {% else %}
                   {% for parasite in object.parasites.all %}
                   <tr>
-                      <td>{{ affliction }}</td>
+                      <td>{{ parasite }}</td>
                   </tr>
                   {% endfor %}
-              {% endif %}
             </tbody>
           </table>
+          {% endif %}
 
-        <p><span class="font-weight-bold">{% trans "Choroby" %}: </span></p>
+        <p><span class="font-weight-bold">{% trans "Choroby" %}: </span>
+          {% if not object.sicknesses.exists %}{% trans "Brak" %}</p>
+         {% else %}</p>
         <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
@@ -64,22 +60,19 @@
               </tr>
             </thead>
             <tbody>
-              {% if not object.sicknesses.exists %}
-                  <tr>
-                      <td>{% trans "Brak" %}</td>
-                  </tr>
-              {% else %}
                   {% for sickness in object.sicknesses.all %}
                   <tr>
                       <td>{{ sickness.sickness.name }}</td>
                       <td>{{ sickenss.antibiotics }}</td>
                   </tr>
                   {% endfor %}
-              {% endif %}
             </tbody>
           </table>
+          {% endif %}
 
-        <p><span class="font-weight-bold">{% trans "Leki" %}: </span></p>
+        <p><span class="font-weight-bold">{% trans "Leki" %}: </span>
+          {% if not object.medicines.exists %}{% trans "Brak" %}</p>
+          {% else %}</p>
         <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
@@ -88,22 +81,19 @@
               </tr>
             </thead>
             <tbody>
-              {% if not object.medicines.exists %}
-                  <tr>
-                      <td>{% trans "Brak" %}</td>
-                  </tr>
-              {% else %}
                   {% for medicine in object.medicines.all %}
                   <tr>
                       <td>{{ medicine.medicine.name }}</td>
                       <td>{{ medicine.amount }} {{ medicine.unit }}</td>
                   </tr>
                   {% endfor %}
-              {% endif %}
             </tbody>
           </table>
+          {% endif %}
 
-        <p><span class="font-weight-bold">{% trans "Grzyby" %}: </span></p>
+        <p><span class="font-weight-bold">{% trans "Grzyby" %}: </span>
+          {% if not object.fungi.exists %}{% trans "Brak" %}</p>
+          {% else %}</p>
         <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
@@ -112,22 +102,19 @@
               </tr>
             </thead>
             <tbody>
-              {% if not object.fungi.exists %}
-                  <tr>
-                      <td>{% trans "Brak" %}</td>
-                  </tr>
-              {% else %}
                   {% for fungus in object.fungi.all %}
                   <tr>
                       <td>{{ fungus.fungus.molecular_identification }}</td>
                       <td>{{ fungus.amount }}</td>
                   </tr>
                   {% endfor %}
-              {% endif %}
             </tbody>
           </table>
+          {% endif %}
 
-        <p><span class="font-weight-bold">{% trans "Kontakty ze zwierzętami" %}: </span></p>
+        <p><span class="font-weight-bold">{% trans "Kontakty ze zwierzętami" %}: </span>
+          {% if not object.animals.exists %}{% trans "Brak" %}</p>
+          {% else %}</p>
         <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
@@ -138,11 +125,6 @@
               </tr>
             </thead>
             <tbody>
-              {% if not object.animals.exists %}
-                  <tr>
-                      <td>{% trans "Brak" %}</td>
-                  </tr>
-              {% else %}
                   {% for animal in object.animals.all %}
                   <tr>
                       <td>{{ animal.animal.name }}</td>
@@ -151,11 +133,13 @@
                       <td>{{ animal.excrement }}</td>
                   </tr>
                   {% endfor %}
-              {% endif %}
             </tbody>
           </table>
+          {% endif %}
 
-        <p><span class="font-weight-bold">{% trans "Podróże" %}: </span></p>
+        <p><span class="font-weight-bold">{% trans "Podróże" %}: </span>
+          {% if not object.travels.exists %}{% trans "Brak" %}</p>
+          {% else %}</p>
         <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
@@ -168,11 +152,6 @@
               </tr>
             </thead>
             <tbody>
-              {% if not object.travels.exists %}
-                  <tr>
-                      <td>{% trans "Brak" %}</td>
-                  </tr>
-              {% else %}
                   {% for travel in object.travels.all %}
                   <tr>
                       <td>{{ travel.country.name }}</td>
@@ -183,9 +162,9 @@
                       <td>{{ travel.get_visit_display }}</td>
                   </tr>
                   {% endfor %}
-              {% endif %}
             </tbody>
           </table>
+          {% endif %}
 
         {% get_field_verbose_name object "collagen_layer_thickening" as label %}
         {% bool_unknown label object.collagen_layer_thickening %}

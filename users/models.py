@@ -16,7 +16,7 @@ class User(AbstractUser):
     )
 
     role = models.PositiveSmallIntegerField(
-        _("rola"), choices=ROLE_CHOICES, blank=False, null=False, default=ROLE_ADMIN
+        _("rola"), choices=ROLE_CHOICES, blank=True, null=False, default=ROLE_ADMIN
     )
 
     phone = PhoneNumberField(null=True, blank=True)
