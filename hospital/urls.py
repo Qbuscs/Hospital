@@ -10,6 +10,7 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("afflictions/", include("afflictions.urls")),
     path("animals/", include("animals.urls")),
+    path("morphologies/", include("morphologies.urls")),
     path("", HomeView.as_view(), name="home"),
     path("", include("core.urls")),
 ]

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.contrib.messages import constants as messages
 
 from django.urls import reverse_lazy
 
@@ -55,11 +56,13 @@ INSTALLED_APPS = [
     'afflictions',
     'hospital',
     'users',
+    'morphologies',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -85,6 +88,14 @@ TEMPLATES = [
         },
     },
 ]
+
+MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-secondary',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+ }
 
 TEMPLATE_DIRS = (
     os.path.join(SETTINGS_PATH, 'templates'),

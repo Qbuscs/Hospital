@@ -11,7 +11,7 @@ class ExaminationForm(forms.ModelForm):
     class Meta:
         model = Examination
         fields = "__all__"
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -43,6 +43,10 @@ class ExaminationForm(forms.ModelForm):
                 ),
                 Div(
                     Div(Fieldset(_("Podróże"), Formset("travels")), css_class="card-body table-responsive table-body"),
+                    css_class="card"
+                ),
+                Div(
+                    Div(Fieldset(_("Badania morfologiczne"), Formset("morphologies")), css_class="card-body table-responsive table-body"),
                     css_class="card"
                 ),
                 Field("collagen_layer_thickening"),

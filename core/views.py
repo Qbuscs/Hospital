@@ -2,14 +2,18 @@ from afflictions.forms import (FungusExaminationFormSet,
                                MedicineExaminationFormSet,
                                SicknessExaminationFormSet)
 from animals.forms import AnimalExaminationFormSet
+from django.contrib import messages
 from django.db import transaction
+from django.forms import ValidationError
 from django.urls import reverse_lazy
 from django.utils.translation import gettext
+from django.shortcuts import render
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 from hospital.mixins import OrderableMixin, SearchableMixin
 from travels.forms import TravelFormSet
 from users.mixins import DoctorMixin, InternMixin
+from morphologies.forms import MorphologyExaminationFormSet
 
 from .forms import ExaminationForm
 from .models import Examination, Patient
@@ -89,12 +93,19 @@ class ExaminationFormView:
         fungi = context["fungi"]
         animals = context["animals"]
         travels = context["travels"]
-        with transaction.atomic():
-            self.object = form.save()
-            for related in [sicknesses, medicines, fungi, animals, travels]:
-                if related.is_valid():
-                    related.instance = self.object
-                    related.save()
+        morphologies = context["morphologies"]
+        try:
+            with transaction.atomic():
+                self.object = form.save()
+                for related in [sicknesses, medicines, fungi, animals, travels, morphologies]:
+                    if related.is_valid():
+                        related.instance = self.object
+                        related.save()
+                    else:
+                        raise ValidationError(related.errors)    
+        except ValidationError:
+            messages.error(self.request, gettext("W formularzu znajdują się błędy. Zjedź niżej po więcej szczegółów."))
+            return render(self.request, self.template_name, context)
         return super().form_valid(form)
 
 
@@ -107,12 +118,14 @@ class ExaminationCreateView(DoctorMixin, ExaminationFormView, CreateView):
             context["fungi"] = FungusExaminationFormSet(self.request.POST)
             context["animals"] = AnimalExaminationFormSet(self.request.POST)
             context["travels"] = TravelFormSet(self.request.POST)
+            context["morphologies"] = MorphologyExaminationFormSet(self.request.POST)
         else:
             context["sicknesses"] = SicknessExaminationFormSet()
             context["medicines"] = MedicineExaminationFormSet()
             context["fungi"] = FungusExaminationFormSet()
             context["animals"] = AnimalExaminationFormSet()
             context["travels"] = TravelFormSet()
+            context["morphologies"] = MorphologyExaminationFormSet()
         context["operation"] = "create"
         return context
 
@@ -126,12 +139,14 @@ class ExaminationUpdateView(DoctorMixin, ExaminationFormView, UpdateView):
             context["fungi"] = FungusExaminationFormSet(self.request.POST, instance=self.object)
             context["animals"] = AnimalExaminationFormSet(self.request.POST, instance=self.object)
             context["travels"] = TravelFormSet(self.request.POST, instance=self.object)
+            context["morphologies"] = MorphologyExaminationFormSet(self.request.POST, instance=self.object)
         else:
             context["sicknesses"] = SicknessExaminationFormSet(instance=self.object)
             context["medicines"] = MedicineExaminationFormSet(instance=self.object)
             context["fungi"] = FungusExaminationFormSet(instance=self.object)
             context["animals"] = AnimalExaminationFormSet(instance=self.object)
             context["travels"] = TravelFormSet(instance=self.object)
+            context["morphologies"] = MorphologyExaminationFormSet(instance=self.object)
         context["operation"] = "edit"
         return context
 

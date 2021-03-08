@@ -18,7 +18,6 @@
   {% endblock %}
 </head>
 <body>
-      {% bootstrap_messages %}
       {% block menu %}
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
           <ul class="nav navbar-nav mr-auto">
@@ -30,6 +29,7 @@
             <li class="nav-item"><a class="nav-link" href="{% url 'medicine_list'%}">{% trans 'Leki' %}</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'animal_list'%}">{% trans 'Zwierzęta' %}</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'patient_list'%}">{% trans 'Pacjenci' %}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'morphology_list'%}">{% trans 'Badania morfologiczne' %}</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'examination_list'%}">{% trans 'Badania' %}</a></li>
             {% is_admin user as admin %}
             {% if admin %}
@@ -44,11 +44,17 @@
             {% else %}
               <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">{% trans 'Zaloguj' %}</a></li>
             {% endif %}
+            {% get_current_language as LANGUAGE_CODE %}
+            <li class="nav-item"><a class="nav-link" href="#">{{ LANGUAGE_CODE }}</a></li>
+            {% endblock %}
           </ul>
-          {% endblock %}
         </nav>
       {% endblock %}
+      {% bootstrap_messages %}
     <hr>
+
+    
+
       {% block content %}
       {% endblock %}
 </body>

@@ -166,6 +166,29 @@
           </table>
           {% endif %}
 
+          <p><span class="font-weight-bold">{% trans "Badania morfologiczne" %}: </span>
+            {% if not object.morphologies.exists %}{% trans "Brak" %}</p>
+            {% else %}</p>
+          <table class="table table-sm">
+              <thead class="thead-dark">
+                <tr>
+                  <th width="16%">{% trans "Badanie morfologiczne" %}</th>
+                  <th width="16%">{% trans "Wartość" %}</th>
+                  <th width="16%">{% trans "Ilość względem normy" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                    {% for morphology in object.morphologies.all %}
+                    <tr>
+                        <td>{{ morphology.morphology }}</td>
+                        <td>{{ morphology.value }}</td>
+                        <td>{{ morphology.norm_str }}</td>
+                    </tr>
+                    {% endfor %}
+              </tbody>
+            </table>
+            {% endif %}
+
         {% get_field_verbose_name object "collagen_layer_thickening" as label %}
         {% bool_unknown label object.collagen_layer_thickening %}
 
