@@ -21,7 +21,7 @@ class AnimalCreateView(DoctorMixin, CreateView):
 class AnimalListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "animals/list.html"
     model = Animal
-    search_fields = ["name"]
+    search_fields = [("name", "icontains")]
 
 
 class AnimalDeleteView(DoctorMixin, DeleteView):

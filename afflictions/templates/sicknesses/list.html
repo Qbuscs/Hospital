@@ -2,11 +2,14 @@
 {% load i18n common %}
 
 {% block content %}
+{% has_doctor_rights user as allowed %}
 <div class="container">
   <div class="row">
     <div class="col-xl-12">
       <h1>{% trans 'Choroby' %}</h1>
-      <a href="{% url 'sickness_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+      {% if allowed %}
+        <a href="{% url 'sickness_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+      {% endif %}
 
       {% search_form search_form %}
 
@@ -23,7 +26,11 @@
           <tr>
             <th>{{ sickness.name }}</th>
             <th><a href="{% url 'sickness_detail' pk=sickness.pk %}"><button class="btn btn-primary">{% trans 'Podgląd' %}</button></a></th>
-            <th><a href="{% url 'sickness_delete' pk=sickness.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a></th>
+            {% if allowed %}
+              <th><a href="{% url 'sickness_delete' pk=sickness.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a></th>
+            {% else %}
+              <th></th>
+            {% endif %}
           </tr>
         {% endfor %}
         </tbody>

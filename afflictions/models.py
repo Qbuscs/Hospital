@@ -48,6 +48,9 @@ class MedicineExamination(models.Model):
     # TODO: Może zrobic z tego choice field (mg, tabletek, kropli, itd.)?
     unit = models.CharField(_("jednostka"), null=True, blank=True, max_length=50)
 
+    def __str__(self):
+        return str(self.medicine) + f" - {self.amount} {self.unit}"
+
 
 class SicknessExamination(models.Model):
     sickness = models.ForeignKey(
@@ -57,6 +60,9 @@ class SicknessExamination(models.Model):
         "core.Examination", verbose_name=_("badanie"), related_name="sicknesses", on_delete=models.CASCADE
     )
     antibiotics = models.BooleanField(_("Antybiotyko terapia"), null=True, blank=True)
+
+    def __str__(self):
+        return str(self.sickness)
 
     class Meta:
         verbose_name = _("Choroba w badaniu")
@@ -102,6 +108,9 @@ class FungusExamination(models.Model):
     fungus = models.ForeignKey(Fungus, verbose_name=_("grzyb"), related_name="examinations", on_delete=models.PROTECT)
     examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), related_name="fungi", on_delete=models.CASCADE)
     amount = models.FloatField(_("ilość <#TODO: jaka jednostka?>"))
+
+    def __str__(self):
+        return f"{self.fungus} - {self.amount}"
 
     class Meta:
         verbose_name = _("grzyb w badaniu")

@@ -33,7 +33,7 @@ class AfflictionUpdateView(DoctorMixin, UpdateView):
 class AfflictionListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "afflictions/list.html"
     model = Affliction
-    search_fields = ["name"]
+    search_fields = [("name", "icontains")]
 
 
 class AfflictionDeleteView(DoctorMixin, DeleteView):

@@ -2,11 +2,14 @@
 {% load i18n common %}
 
 {% block content %}
+{% has_doctor_rights user as allowed %}
 <div class="container">
   <div class="row">
     <div class="col-xl-12">
     <h1>{% trans 'Grzyby' %}</h1>
-    <a href="{% url 'fungus_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+    {% if allowed %}
+      <a href="{% url 'fungus_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+    {% endif %}
 
     {% search_form search_form %}
 
@@ -25,7 +28,11 @@
           <th>{{ fungus.molecular_identification }}</th>
           <th>{{ fungus.get_antibiotics_resistance_display }}</th>
           <th><a href="{% url 'fungus_detail' pk=fungus.pk %}"><button class="btn btn-primary">{% trans 'Podgląd' %}</button></a></th>
-          <th><a href="{% url 'fungus_delete' pk=fungus.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a></th>
+          <th>
+            {% if allowed %}
+              <a href="{% url 'fungus_delete' pk=fungus.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a>
+            {% endif %}
+          </th>
         </tr>
       {% endfor %}
       </tbody>

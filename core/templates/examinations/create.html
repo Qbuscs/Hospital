@@ -36,6 +36,10 @@ $ (document).ready( function() {
         "startDate": "-5y",
         "format": "dd/mm/yyyy",
     });
+    $("*[class='form-control'][name*=date]").datepicker({
+        "startDate": "-5y",
+        "format": "dd/mm/yyyy",
+    });
 });
 </script>
 {% endblock %}

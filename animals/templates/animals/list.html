@@ -2,11 +2,14 @@
 {% load i18n common %}
 
 {% block content %}
+{% has_doctor_rights user as allowed %}
 <div class="container">
   <div class="row">
     <div class="col-xl-12">
       <h1>{% trans 'Zwierzęta' %}</h1>
-      <a href="{% url 'animal_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+      {% if allowed %}
+        <a href="{% url 'animal_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+      {% endif %}
 
       {% search_form search_form %}
 
@@ -22,8 +25,13 @@
         {% for animal in object_list %}
           <tr>
             <th>{{ animal.name }}</th>
-            <th><a href="{% url 'animal_update' pk=animal.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a></th>
-            <th><a href="{% url 'animal_delete' pk=animal.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a></th>
+            {% if allowed %}
+              <th><a href="{% url 'animal_update' pk=animal.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a></th>
+              <th><a href="{% url 'animal_delete' pk=animal.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a></th>
+            {% else %}
+              <th></th>
+              <th></th>
+            {% endif %}
           </tr>
         {% endfor %}
         </tbody>

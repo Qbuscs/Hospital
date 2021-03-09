@@ -1,6 +1,5 @@
 {% load i18n %}
 <p><span class="font-weight-bold">{{ label }}: </span>
-
     {% trans "Tak,Nie,???" as val_str %}
     {{ val|yesno:val_str }}
 </p>

@@ -15,7 +15,14 @@ User = get_user_model()
 class UserListView(OrderableMixin, SearchableMixin, AdminMixin, ListView):
     model = User
     template_name = "user_list.html"
-    search_fields = ["username", "first_name", "last_name", "email", "phone", "role"]
+    search_fields = [
+        ("username", "icontains"),
+        ("first_name", "icontains"),
+        ("last_name", "icontains"),
+        ("email", "icontains"),
+        ("phone", "icontains"),
+        ("role", "icontains")
+    ]
 
 
 class UserCreateView(AdminMixin, CreateView):

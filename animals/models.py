@@ -32,6 +32,9 @@ class AnimalExamination(models.Model):
     saliva = models.BooleanField(_("kontakt ze śliną"), null=True, blank=True)
     excrement = models.BooleanField(_("kontakt z odchodami"), null=True, blank=True)
 
+    def __str__(self):
+        return str(self.animal)
+
     class Meta:
         verbose_name = _("Kontakt ze zwierzęciem")
         verbose_name_plural = _("Kontakty ze zwierzętami")

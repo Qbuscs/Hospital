@@ -35,7 +35,7 @@ class FungusUpdateView(DoctorMixin, UpdateView):
 class FungusListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "fungi/list.html"
     model = Fungus
-    search_fields = ["molecular_identification", "antibiotics_resistance"]
+    search_fields = [("molecular_identification", "icontains"), ("antibiotics_resistance", "icontains")]
 
 
 class FungusDeleteView(DoctorMixin, DeleteView):

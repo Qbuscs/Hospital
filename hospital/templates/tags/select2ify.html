@@ -1,5 +1,8 @@
 <script>
     $(document).ready(function() {
         $('#{{id}}').select2();
+        {% if breakline %}
+            $('<br>').insertBefore('#{{id}}');
+        {% endif %}
     });
 </script>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n common %}
 
 {% block content %}
 <div class="container">
@@ -27,7 +27,10 @@
         </tbody>
       </table>
       <a href="{% url 'sickness_list' %}"><button class="btn btn-secondary">{% trans 'Wróć' %}</button></a>
-      <a href="{% url 'sickness_update' pk=object.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a>
+      {% has_doctor_rights user as allowed %}
+      {% if allowed %}
+        <a href="{% url 'sickness_update' pk=object.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a>
+      {% endif %}
     </div>
   </div>
 </div>

@@ -35,7 +35,7 @@ class SicknessUpdateView(DoctorMixin, UpdateView):
 class SicknessListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "sicknesses/list.html"
     model = Sickness
-    search_fields = ["name"]
+    search_fields = [("name", "icontains")]
 
 
 class SicknessDeleteView(DoctorMixin, DeleteView):

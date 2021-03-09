@@ -33,7 +33,7 @@ class MorphologyUpdateView(DoctorMixin, UpdateView):
 class MorphologyListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "list.html"
     model = Morphology
-    search_fields = ["name", "unit"]
+    search_fields = [("name", "icontains"), ("unit", "icontains")]
 
 
 class MorphologyDeleteView(DoctorMixin, DeleteView):

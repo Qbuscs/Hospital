@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n common %}
 
 {% block content %}
+{% has_doctor_rights user as allowed %}
 <div class="container">
   <div class="row">
     <div class="col-xl-12">
@@ -31,7 +32,9 @@
       </tbody>
       </table>
     <a href="{% url 'patient_list' %}"><button class="btn btn-secondary">{% trans 'Wróć' %}</button></a>
-    <a href="{% url 'patient_update' pk=object.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a>
+    {% if allowed %}
+      <a href="{% url 'patient_update' pk=object.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a>
+    {% endif %}
     </div>
   </div>
 </div>

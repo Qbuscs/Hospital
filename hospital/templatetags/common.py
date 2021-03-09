@@ -10,8 +10,8 @@ def bool_unknown(label, val):
     return {"label": label, "val": val}
 
 @register.inclusion_tag("tags/select2ify.html")
-def select2ify(id):
-    return {"id": id}
+def select2ify(id, breakline=False):
+    return {"id": id, "breakline": breakline}
 
 @register.inclusion_tag("tags/orderable_header.html")
 def orderable_header(name, label, width=None):
@@ -28,5 +28,11 @@ def get_field_verbose_name(instance, field_name):
 @register.simple_tag
 def is_admin(user):
     if isinstance(user, User) and user.role == User.ROLE_ADMIN:
+        return True
+    return False
+
+@register.simple_tag
+def has_doctor_rights(user):
+    if isinstance(user, User) and (user.role == User.ROLE_DOCTOR or user.role == User.ROLE_ADMIN):
         return True
     return False

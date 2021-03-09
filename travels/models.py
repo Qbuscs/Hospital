@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext
 from django_countries.fields import CountryField
 
 from core.models import Examination
@@ -45,6 +46,9 @@ class Travel(models.Model):
     food = models.PositiveSmallIntegerField(_("odżywianie"), choices=FOOD_CHOICES, null=True, blank=True)
     drinks = models.PositiveSmallIntegerField(_("napoje"), choices=DRINKS_CHOICES, null=True, blank=True)
     visit = models.PositiveSmallIntegerField(_("rodzaj wizyty"), choices=VISIT_CHOICES, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.country.name} ({self.date_start} " + gettext("do") + f" {self.date_end})"
 
     class Meta:
         verbose_name = _("podróż")

@@ -1,10 +1,12 @@
 from afflictions.forms import (FungusExaminationFormSet,
                                MedicineExaminationFormSet,
                                SicknessExaminationFormSet)
+from afflictions import models as afflictions_models
 from animals.forms import AnimalExaminationFormSet
 from django.contrib import messages
+from django.contrib.admin import widgets
 from django.db import transaction
-from django.forms import ValidationError
+from django.forms import ValidationError, DateField, ModelMultipleChoiceField
 from django.urls import reverse_lazy
 from django.utils.translation import gettext
 from django.shortcuts import render
@@ -12,6 +14,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 from hospital.mixins import OrderableMixin, SearchableMixin
 from travels.forms import TravelFormSet
+from travels.models import Travel
 from users.mixins import DoctorMixin, InternMixin
 from morphologies.forms import MorphologyExaminationFormSet
 
@@ -22,7 +25,13 @@ from .models import Examination, Patient
 class PatientListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "patients/list.html"
     model = Patient
-    search_fields = ["first_name", "last_name", "gender", "age", "education"]
+    search_fields = [
+        ("first_name", "icontains"),
+        ("last_name", "icontains"),
+        ("gender", "icontains"),
+        ("age", "icontains"),
+        ("education", "icontains")
+    ]
 
 
 class PatientDeleteView(DoctorMixin, DeleteView):
@@ -66,18 +75,47 @@ class PatientUpdateView(DoctorMixin, UpdateView):
 class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "examinations/list.html"
     model = Examination
-    search_fields = ["date"]
+    search_fields = [
+        ("afflictions", "in"),
+        ("parasites", "in"),
+    ]
 
     def get_extra_search_fields(self):
+        date_from_field = DateField(label=gettext("Data od"))
+        date_to_field = DateField(label=gettext("Data do"))
         first_name_field = Patient._meta.get_field("first_name").formfield()
         last_name_field = Patient._meta.get_field("last_name").formfield()
+        sickness_field = ModelMultipleChoiceField(
+            queryset=afflictions_models.Sickness.objects.all(), label=gettext("Choroby")
+        )
+        fungus_field = ModelMultipleChoiceField(
+            queryset=afflictions_models.Fungus.objects.all(), label=gettext("Grzyby")
+        )
+        country_field = Travel._meta.get_field("country").formfield()
+
         first_name_field.label = gettext("Imię pacjenta")
         last_name_field.label = gettext("Nazwisko pacjenta")
-        return {"patient__first_name": first_name_field, "patient__last_name": last_name_field}
+        country_field.label = gettext("Kraj podróży")
+        return {
+            "date__gte": (date_from_field, None),
+            "date__lte": (date_to_field, None),
+            "patient__first_name": (first_name_field, "icontains"),
+            "patient__last_name": (last_name_field, "icontains"),
+            "sicknesses__sickness": (sickness_field, "in"),
+            "fungi__fungus": (fungus_field, "in"),
+            "travels__country": (country_field, "icontains"),
+        }
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.select_related("patient")
+        queryset = queryset.select_related("patient")
+        queryset = queryset.prefetch_related(
+            "afflictions", "parasites", "sicknesses", "sicknesses__sickness",
+            "fungi", "fungi__fungus", "medicines", "medicines__medicine",
+            "travels", "morphologies", "morphologies__morphology", "animals",
+            "animals__animal"
+        )
+        return queryset
 
 
 class ExaminationFormView:

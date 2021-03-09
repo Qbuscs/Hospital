@@ -43,6 +43,9 @@ class MorphologyExamination(models.Model):
             MorphologyExamination.MORPHOLOGY_HIGH: _("Powyżej normy"),
         }
         return morphology_text[self.norm()]
+    
+    def __str__(self):
+        return f"{self.morphology.name} - {self.value} {self.morphology.unit} ({self.norm_str()})"
 
     class Meta:
         unique_together = ("morphology", "examination")
