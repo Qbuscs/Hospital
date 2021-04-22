@@ -90,14 +90,14 @@ class Fungus(models.Model):
         blank=True,
         null=True
     )
-    molecular_identification = models.TextField(_("identyfikacja molekularna"), null=False, blank=False)
+    name = models.CharField(_("Nazwa"), max_length=200, null=False, blank=False)
     antibiotics_resistance = models.PositiveSmallIntegerField(
         _("odporność na antybiotyki"),
         choices=ANTIBIOTICS_RESISTANCE_CHOICES
     )
 
     def __str__(self):
-        return f"{self.molecular_identification}"
+        return f"{self.name}"
 
     class Meta:
         verbose_name = _("grzyb")
@@ -118,12 +118,16 @@ class FungusExamination(models.Model):
 
 
 class Parasite(models.Model):
-    name = models.CharField(_("nazwa"), null=False, blank=False, max_length=200)
+    species = models.CharField(_("gatunek"), null=False, blank=False, max_length=200)
+    subtype = models.CharField(_("sub-typ"), null=True, blank=True, max_length=200)
     afflictions = models.ManyToManyField(Affliction, verbose_name=_("objawy"), related_name="parasites")
 
     def __str__(self):
-        return f"{self.name}"
+        if self.subtype:
+            return f"{self.species} {self.subtype}"
+        return f"{self.species}"
     
     class Meta:
         verbose_name = _("pasożyt")
         verbose_name_plural = _("pasożyty")
+        unique_together = (("species", "subtype"))

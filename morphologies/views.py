@@ -3,7 +3,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from users.mixins import DoctorMixin, InternMixin
 
 from .models import Morphology
-from hospital.mixins import OrderableMixin, SearchableMixin
+from hospital.mixins import OrderableMixin, SearchableMixin, CSVMixin
 
 
 class MorphologyCreateView(DoctorMixin, CreateView):
@@ -30,7 +30,7 @@ class MorphologyUpdateView(DoctorMixin, UpdateView):
         return context
 
 
-class MorphologyListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
+class MorphologyListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
     template_name = "list.html"
     model = Morphology
     search_fields = [("name", "icontains"), ("unit", "icontains")]

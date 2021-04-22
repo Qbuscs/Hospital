@@ -3,7 +3,7 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 from users.mixins import DoctorMixin, InternMixin
 
 from afflictions.models import Sickness
-from hospital.mixins import OrderableMixin, SearchableMixin
+from hospital.mixins import OrderableMixin, SearchableMixin, CSVMixin
 
 
 class SicknessCreateView(DoctorMixin, CreateView):
@@ -32,7 +32,7 @@ class SicknessUpdateView(DoctorMixin, UpdateView):
         return context
 
 
-class SicknessListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
+class SicknessListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
     template_name = "sicknesses/list.html"
     model = Sickness
     search_fields = [("name", "icontains")]

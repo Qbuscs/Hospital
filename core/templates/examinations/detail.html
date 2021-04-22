@@ -105,7 +105,7 @@
             <tbody>
                   {% for fungus in object.fungi.all %}
                   <tr>
-                      <td>{{ fungus.fungus.molecular_identification }}</td>
+                      <td>{{ fungus.fungus.name }}</td>
                       <td>{{ fungus.amount }}</td>
                   </tr>
                   {% endfor %}

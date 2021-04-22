@@ -1,3 +1,5 @@
+import djqscsv
+
 from django.core.exceptions import FieldError
 from django.forms import modelform_factory
 from collections import OrderedDict
@@ -76,3 +78,21 @@ class SearchableMixin:
                     queryset = queryset.filter(**{f"{field_name}{operation}": val})
         queryset = queryset.filter(**filters)
         return queryset
+
+
+class CSVMixin:
+    def get_csv_mapping(self):
+        # this is a blank to be overwritten in view classes
+        return {}
+
+    def get_csv_queryset(self):
+        return self.get_queryset()
+
+    def get_csv(self, request):
+        qs = self.get_csv_queryset()
+        return djqscsv.render_to_csv_response(qs, delimiter=";", field_serializer_map=self.get_csv_mapping())
+
+    def get(self, request, *args, **kwargs):
+        if "csv" in request.GET:
+            return self.get_csv(request)
+        return super().get(request, *args, **kwargs)

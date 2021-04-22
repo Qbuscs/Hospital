@@ -3,13 +3,13 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 from users.mixins import DoctorMixin, InternMixin
 
 from afflictions.models import Parasite
-from hospital.mixins import OrderableMixin, SearchableMixin
+from hospital.mixins import OrderableMixin, SearchableMixin, CSVMixin
 
 
 class ParasiteCreateView(DoctorMixin, CreateView):
     template_name = "parasites/create.html"
     model = Parasite
-    fields = ["name", "afflictions"]
+    fields = ["species", "subtype", "afflictions"]
     success_url = reverse_lazy("parasite_list")
 
     def get_context_data(self, **kwargs):
@@ -21,7 +21,7 @@ class ParasiteCreateView(DoctorMixin, CreateView):
 class ParasiteUpdateView(DoctorMixin, UpdateView):
     template_name = "parasites/create.html"
     model = Parasite
-    fields = ["name", "afflictions"]
+    fields = ["species", "subtype", "afflictions"]
     success_url = reverse_lazy("parasite_list")
 
     def get_success_url(self):
@@ -33,10 +33,10 @@ class ParasiteUpdateView(DoctorMixin, UpdateView):
         return context
 
 
-class ParasiteListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
+class ParasiteListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
     template_name = "parasites/list.html"
     model = Parasite
-    search_fields = [("name", "icontains")]
+    search_fields = [("species", "icontains"), ("subtype", "icontains")]
 
 
 class ParasiteDeleteView(DoctorMixin, DeleteView):

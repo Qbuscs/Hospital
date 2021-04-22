@@ -1,18 +1,22 @@
+import csv
+
 from afflictions.forms import (FungusExaminationFormSet,
                                MedicineExaminationFormSet,
                                SicknessExaminationFormSet)
 from afflictions import models as afflictions_models
 from animals.forms import AnimalExaminationFormSet
+from animals.models import AnimalExamination
 from django.contrib import messages
 from django.contrib.admin import widgets
 from django.db import transaction
 from django.forms import ValidationError, DateField, ModelMultipleChoiceField
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext
 from django.shortcuts import render
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
-from hospital.mixins import OrderableMixin, SearchableMixin
+from hospital.mixins import OrderableMixin, SearchableMixin, CSVMixin
 from travels.forms import TravelFormSet
 from travels.models import Travel
 from users.mixins import DoctorMixin, InternMixin
@@ -22,7 +26,7 @@ from .forms import ExaminationForm
 from .models import Examination, Patient
 
 
-class PatientListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
+class PatientListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
     template_name = "patients/list.html"
     model = Patient
     search_fields = [
@@ -32,6 +36,12 @@ class PatientListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
         ("age", "icontains"),
         ("education", "icontains")
     ]
+
+    def get_csv_mapping(self):
+        return {
+            "education": lambda x: Patient.EDUCATION_CHOICES[x][1],
+            "gender": lambda x: Patient.GENDER_CHOICES[x][1]
+        }
 
 
 class PatientDeleteView(DoctorMixin, DeleteView):
@@ -116,6 +126,93 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
             "animals__animal"
         )
         return queryset
+
+    def build_animals_row(self, examination):
+        animals = examination.animals.all()
+        animals_row = []
+        for animal in animals:
+            animals_row.append((
+                animal.animal.name,
+                AnimalExamination.CONTACT_CHOICES[animal.contact][1],
+                animal.saliva,
+                animal.excrement
+            ))
+        return animals_row
+    
+    def build_travels_row(self, examination):
+        travels = examination.travels.all()
+        travels_row = []
+        for travel in travels:
+            travels_row.append((
+                travel.country.name,
+                travel.date_start.strftime("%d/%m/%Y"),
+                travel.date_end.strftime("%d/%m/%Y")
+            ))
+        return travels_row
+    
+    def build_morphologies_row(self, examination):
+        morphologies = examination.morphologies.all()
+        morphologies_row = []
+        for morphology in morphologies:
+            morphologies_row.append((
+                morphology.morphology.name,
+                morphology.value,
+                morphology.morphology.unit,
+                morphology.norm_str()
+            ))
+        return morphologies_row
+
+    def get_csv(self):
+        examinations = self.get_queryset()
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="examinations_export.csv"'
+        writer = csv.writer(response, delimiter=";")
+        writer.writerow([
+            "ID",
+            gettext("data"),
+            gettext("imię pacjenta"),
+            gettext("nazwisko pacjenta"),
+            gettext("objawy"),
+            gettext("choroby"),
+            gettext("pasożyty (gatunek, subtyp)"),
+            gettext("grzyby (gatunek, ilość)"),
+            gettext("leki"),
+            gettext("zwierzęta (gatunek, rodzaj kontaktu, kontakt ze śliną, kontakt z odchodami)"),
+            gettext("podróże (kraj, start, powrót)"),
+            gettext("badania morfologiczne (badanie, wynik, jednostka, norma)"),
+            gettext("naciek z limfocytów"),
+            gettext("naciek z plazmocytów"),
+            gettext("naciek z eozynofili"),
+            gettext("naciek z komórek tucznych"),
+            gettext("naciek z neutrocytów"),
+        ])
+        for obj in examinations:
+            writer.writerow([
+                obj.id,
+                obj.date,
+                obj.patient.first_name,
+                obj.patient.last_name,
+                list(obj.afflictions.values_list("name")),
+                list(obj.sicknesses.values_list("sickness__name")),
+                list(obj.parasites.values_list("species", "subtype")),
+                list(obj.fungi.values_list("fungus__name", "amount")),
+                list(obj.medicines.values_list("medicine__name", "amount", "unit")),
+                self.build_animals_row(obj),
+                self.build_travels_row(obj),
+                self.build_morphologies_row(obj),
+                obj.lymphocytes_infiltration,
+                obj.plasmocytes_infiltration,
+                obj.eosinophils_infiltration,
+                obj.mast_cells_infiltration,
+                obj.neutrocytes_infiltration
+            ])
+
+        return response
+
+    def get(self, request, *args, **kwargs):
+        if "csv" in request.GET:
+            return self.get_csv()
+        return super().get(request, *args, **kwargs)
 
 
 class ExaminationFormView:

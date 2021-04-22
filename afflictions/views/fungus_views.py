@@ -3,7 +3,7 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 from users.mixins import DoctorMixin, InternMixin
 
 from afflictions.models import Fungus
-from hospital.mixins import OrderableMixin, SearchableMixin
+from hospital.mixins import OrderableMixin, SearchableMixin, CSVMixin
 
 
 class FungusCreateView(DoctorMixin, CreateView):
@@ -24,7 +24,7 @@ class FungusUpdateView(DoctorMixin, UpdateView):
     fields = "__all__"
 
     def get_success_url(self):
-        return reverse_lazy("fungus_detail", kwargs={"pk": self.object})
+        return reverse_lazy("fungus_detail", kwargs={"pk": self.object.id})
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -32,10 +32,13 @@ class FungusUpdateView(DoctorMixin, UpdateView):
         return context
 
 
-class FungusListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
+class FungusListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
     template_name = "fungi/list.html"
     model = Fungus
-    search_fields = [("molecular_identification", "icontains"), ("antibiotics_resistance", "icontains")]
+    search_fields = [("name", "icontains"), ("antibiotics_resistance", "icontains")]
+
+    def get_csv_mapping(self):
+        return {"antibiotics_resistance": lambda x: Fungus.ANTIBIOTICS_RESISTANCE_CHOICES[x][1]}
 
 
 class FungusDeleteView(DoctorMixin, DeleteView):

@@ -20,9 +20,9 @@ class Patient(models.Model):
         (EDUCATION_HIGHER, _("wyższe")),
     )
 
-    GENDER_MALE = 1
-    GENDER_FEMALE = 2
-    GENDER_OTHER = 3
+    GENDER_MALE = 0
+    GENDER_FEMALE = 1
+    GENDER_OTHER = 2
 
     GENDER_CHOICES = (
         (GENDER_MALE, _("mężczyzna")),
