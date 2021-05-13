@@ -82,10 +82,11 @@ class SearchableMixin:
 
 class CSVMixin:
     def get_csv_mapping(self):
-        # this is a blank to be overwritten in view classes
+        # this is a default to be overwritten in view classes
         return {}
 
     def get_csv_queryset(self):
+        # this is a default to be overwritten in view classes
         return self.get_queryset()
 
     def get_csv(self, request):

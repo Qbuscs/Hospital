@@ -96,6 +96,10 @@ class Fungus(models.Model):
         choices=ANTIBIOTICS_RESISTANCE_CHOICES
     )
 
+    @classmethod
+    def get_antibiotics_resistance_display(val):
+        return cls.ANTIBIOTICS_RESISTANCE_CHOICES[val]
+
     def __str__(self):
         return f"{self.name}"
 
