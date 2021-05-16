@@ -88,7 +88,6 @@ class Fungus(models.Model):
         verbose_name=_("objawy"),
         related_name="fungi",
         blank=True,
-        null=True
     )
     name = models.CharField(_("Nazwa"), max_length=200, null=False, blank=False)
     antibiotics_resistance = models.PositiveSmallIntegerField(

@@ -7,7 +7,6 @@ from afflictions import models as afflictions_models
 from animals.forms import AnimalExaminationFormSet
 from animals.models import AnimalExamination
 from django.contrib import messages
-from django.contrib.admin import widgets
 from django.db import transaction
 from django.forms import ValidationError, DateField, ModelMultipleChoiceField
 from django.http import HttpResponse
@@ -19,11 +18,13 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 from hospital.mixins import OrderableMixin, SearchableMixin, CSVMixin
 from travels.forms import TravelFormSet
 from travels.models import Travel
+from travels.utils import get_coords
 from users.mixins import DoctorMixin, InternMixin
 from morphologies.forms import MorphologyExaminationFormSet
 
 from .forms import ExaminationForm
 from .models import Examination, Patient
+from .utils import get_travels_from_examinations
 
 
 class PatientListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
@@ -107,12 +108,12 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
         last_name_field.label = gettext("Nazwisko pacjenta")
         country_field.label = gettext("Kraj podróży")
         return {
+            "sicknesses__sickness": (sickness_field, "in"),
+            "fungi__fungus": (fungus_field, "in"),
             "date__gte": (date_from_field, None),
             "date__lte": (date_to_field, None),
             "patient__first_name": (first_name_field, "icontains"),
             "patient__last_name": (last_name_field, "icontains"),
-            "sicknesses__sickness": (sickness_field, "in"),
-            "fungi__fungus": (fungus_field, "in"),
             "travels__country": (country_field, "icontains"),
         }
 
@@ -138,7 +139,7 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
                 animal.excrement
             ))
         return animals_row
-    
+
     def build_travels_row(self, examination):
         travels = examination.travels.all()
         travels_row = []
@@ -149,7 +150,7 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
                 travel.date_end.strftime("%d/%m/%Y")
             ))
         return travels_row
-    
+
     def build_morphologies_row(self, examination):
         morphologies = examination.morphologies.all()
         morphologies_row = []
@@ -213,6 +214,13 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
         if "csv" in request.GET:
             return self.get_csv()
         return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        examinations = super().get_queryset()
+        travels = get_travels_from_examinations(examinations)
+        context["coords"] = get_coords(travels)
+        return context
 
 
 class ExaminationFormView:
