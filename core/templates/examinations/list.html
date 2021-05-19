@@ -17,6 +17,7 @@
       {% if allowed %}
         <a href="{% url 'examination_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
       {% endif %}
+      <button id="map-btn" class="btn btn-outline-primary" onclick="loadMap();">{% trans "Pokaż mapę" %}</button>
     </div>
   </div>
 
@@ -138,6 +139,8 @@
 <script src="{% static 'js/map/choropleth.js' %}" type="text/javascript"></script>
 <script>
 
+  $("#map").css("display", "none");
+
   patients_features = [];
   {% for coord in coords %}
     patients_features.push(
@@ -148,6 +151,11 @@
       
     );
   {% endfor %}
+
+  var countries = new ol.source.Vector({
+    url: 'http://127.0.0.1:8000/static/vectors/World.geojson', //TODO: Change that url
+    format: new ol.format.GeoJSON()
+  }); 
 
 </script>
 <script src="{% static 'js/map/map.js' %}" type="text/javascript"></script>

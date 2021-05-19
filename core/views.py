@@ -8,7 +8,7 @@ from animals.forms import AnimalExaminationFormSet
 from animals.models import AnimalExamination
 from django.contrib import messages
 from django.db import transaction
-from django.forms import ValidationError, DateField, ModelMultipleChoiceField
+from django.forms import ValidationError, DateField, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext
@@ -92,8 +92,8 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
     ]
 
     def get_extra_search_fields(self):
-        date_from_field = DateField(label=gettext("Data od"))
-        date_to_field = DateField(label=gettext("Data do"))
+        date_from_field = DateField(label=gettext("Data od"), widget=TextInput(attrs={"autocomplete": "off"}))
+        date_to_field = DateField(label=gettext("Data do"), widget=TextInput(attrs={"autocomplete": "off"}))
         first_name_field = Patient._meta.get_field("first_name").formfield()
         last_name_field = Patient._meta.get_field("last_name").formfield()
         sickness_field = ModelMultipleChoiceField(
@@ -132,35 +132,35 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
         animals = examination.animals.all()
         animals_row = []
         for animal in animals:
-            animals_row.append((
-                animal.animal.name,
-                AnimalExamination.CONTACT_CHOICES[animal.contact][1],
-                animal.saliva,
-                animal.excrement
-            ))
+            animals_row.append({
+                "name": animal.animal.name,
+                "contact": AnimalExamination.CONTACT_CHOICES[animal.contact][1],
+                "saliva": animal.saliva,
+                "excrement": animal.excrement
+            })
         return animals_row
 
     def build_travels_row(self, examination):
         travels = examination.travels.all()
         travels_row = []
         for travel in travels:
-            travels_row.append((
-                travel.country.name,
-                travel.date_start.strftime("%d/%m/%Y"),
-                travel.date_end.strftime("%d/%m/%Y")
-            ))
+            travels_row.append({
+                "country": travel.country.name,
+                "date_start": travel.date_start.strftime("%d/%m/%Y"),
+                "date_end": travel.date_end.strftime("%d/%m/%Y")
+            })
         return travels_row
 
     def build_morphologies_row(self, examination):
         morphologies = examination.morphologies.all()
         morphologies_row = []
         for morphology in morphologies:
-            morphologies_row.append((
-                morphology.morphology.name,
-                morphology.value,
-                morphology.morphology.unit,
-                morphology.norm_str()
-            ))
+            morphologies_row.append({
+                "morphology": morphology.morphology.name,
+                "value": morphology.value,
+                "unit": morphology.morphology.unit,
+                "norm": morphology.norm_str()
+            })
         return morphologies_row
 
     def get_csv(self):
@@ -193,11 +193,11 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
                 obj.date,
                 obj.patient.first_name,
                 obj.patient.last_name,
-                list(obj.afflictions.values_list("name")),
-                list(obj.sicknesses.values_list("sickness__name")),
-                list(obj.parasites.values_list("species", "subtype")),
-                list(obj.fungi.values_list("fungus__name", "amount")),
-                list(obj.medicines.values_list("medicine__name", "amount", "unit")),
+                list(obj.afflictions.values("name")),
+                list(obj.sicknesses.values("sickness__name")),
+                list(obj.parasites.values("species", "subtype")),
+                list(obj.fungi.values("fungus__name", "amount")),
+                list(obj.medicines.values("medicine__name", "amount", "unit")),
                 self.build_animals_row(obj),
                 self.build_travels_row(obj),
                 self.build_morphologies_row(obj),
@@ -217,7 +217,7 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        examinations = super().get_queryset()
+        examinations = super().get_queryset().prefetch_related("travels")
         travels = get_travels_from_examinations(examinations)
         context["coords"] = get_coords(travels)
         return context

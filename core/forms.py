@@ -22,7 +22,7 @@ class ExaminationForm(forms.ModelForm):
         self.helper.layout = Layout(
             Div(
                 Field("patient"),
-                Field("date"),
+                Field("date", autocomplete="off"),
                 Field("afflictions", style="width: 100%"),
                 Field("parasites", style="width: 100%"),
                 Div(

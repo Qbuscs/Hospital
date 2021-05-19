@@ -80,9 +80,6 @@ class Fungus(models.Model):
         (ANTIBIOTICS_RESISTANCE_HIGH, _("wysoka")),
     )
 
-    # TODO: hodowla
-    # TODO: gatunek
-    # TODO: genotyp
     afflictions = models.ManyToManyField(
         Affliction,
         verbose_name=_("objawy"),
@@ -95,10 +92,6 @@ class Fungus(models.Model):
         choices=ANTIBIOTICS_RESISTANCE_CHOICES
     )
 
-    @classmethod
-    def get_antibiotics_resistance_display(val):
-        return cls.ANTIBIOTICS_RESISTANCE_CHOICES[val]
-
     def __str__(self):
         return f"{self.name}"
 
@@ -110,7 +103,7 @@ class Fungus(models.Model):
 class FungusExamination(models.Model):
     fungus = models.ForeignKey(Fungus, verbose_name=_("grzyb"), related_name="examinations", on_delete=models.PROTECT)
     examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), related_name="fungi", on_delete=models.CASCADE)
-    amount = models.FloatField(_("ilość <#TODO: jaka jednostka?>"))
+    amount = models.FloatField(_("ilość"))
 
     def __str__(self):
         return f"{self.fungus} - {self.amount}"
@@ -123,7 +116,9 @@ class FungusExamination(models.Model):
 class Parasite(models.Model):
     species = models.CharField(_("gatunek"), null=False, blank=False, max_length=200)
     subtype = models.CharField(_("sub-typ"), null=True, blank=True, max_length=200)
-    afflictions = models.ManyToManyField(Affliction, verbose_name=_("objawy"), related_name="parasites")
+    afflictions = models.ManyToManyField(
+        Affliction, verbose_name=_("objawy"), related_name="parasites", null=True, blank=True
+    )
 
     def __str__(self):
         if self.subtype:

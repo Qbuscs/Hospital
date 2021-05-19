@@ -40,6 +40,14 @@ $ (document).ready( function() {
         "startDate": "-5y",
         "format": "dd/mm/yyyy",
     });
+    $("*[name*=date_start]").datepicker({
+        "startDate": "-5y",
+        "format": "dd/mm/yyyy",
+    });
+    $("*[name*=date_end]").datepicker({
+        "startDate": "-5y",
+        "format": "dd/mm/yyyy",
+    });
 });
 </script>
 {% endblock %}

@@ -1,10 +1,10 @@
 {% load i18n %}
 
 <th id="{{name}}_header" class="no-sort" {% if width %}width={{width}}{% endif %}>
-<a onclick="toggle_{{name}}()" ><button class="btn text-light">
+<a onclick="toggle_{{name}}()" >
         {% trans label %}
         <i class="fa fa-caret-right" aria-hidden="true"></i>
-    </button></a>
+    </a>
 </th>
 
 <script>
