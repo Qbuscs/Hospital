@@ -34,6 +34,7 @@ class AfflictionListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin,
     template_name = "afflictions/list.html"
     model = Affliction
     search_fields = [("name", "icontains")]
+    paginate_by = 10
 
 
 class AfflictionDeleteView(DoctorMixin, DeleteView):

@@ -21,6 +21,7 @@ class AnimalCreateView(DoctorMixin, CreateView):
 class AnimalListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
     template_name = "animals/list.html"
     model = Animal
+    paginate_by = 10
     search_fields = [("name", "icontains")]
 
 

@@ -33,6 +33,7 @@ class MorphologyUpdateView(DoctorMixin, UpdateView):
 class MorphologyListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
     template_name = "list.html"
     model = Morphology
+    paginate_by = 10
     search_fields = [("name", "icontains"), ("unit", "icontains")]
 
 

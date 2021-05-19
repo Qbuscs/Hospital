@@ -77,6 +77,8 @@
         //alert(jstsPolygons[i]);
     }
 
+    console.log(polygonFeatures[177]);
+
     for (var i=0; i<pointFeatures.length;i++)
     {
         jstsPoints[i]=parser.read(pointFeatures[i].getGeometry());
@@ -92,6 +94,7 @@
         {
             if (jstsPolygons[i].contains(jstsPoints[j]))
             {
+                // jstsPoints[j].coordinate = new jsts.geom.Coordinate();
                 numPointsinPolys[i]+=1;
             }
         }
@@ -101,7 +104,17 @@
         if (numPointsinPolys[i]>maxPoints)
             maxPoints=numPointsinPolys[i];
     }
-	console.log(maxPoints);
+
+        // for (var j=0; j<jstsPoints.length;j++)
+        // {
+        //     if (jstsPoints[j].coordinate.x != 0 && jstsPoints[j].coordinate.y != 0 )
+        //     {
+        //         console.log(j, ": ", jstsPoints[j]);
+        //     }
+        // }
+
+    // console.log("maxPoints = ", maxPoints);
+    // console.log("totalPoints = ", numPointsinPolys.reduce((a, b) => a + b, 0));
     //save max value for choropleth styling:
     maxPointsperPolygon=maxPoints;
 

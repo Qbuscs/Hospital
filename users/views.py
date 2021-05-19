@@ -15,6 +15,7 @@ User = get_user_model()
 class UserListView(OrderableMixin, SearchableMixin, AdminMixin, ListView):
     model = User
     template_name = "user_list.html"
+    paginate_by = 10
     search_fields = [
         ("username", "icontains"),
         ("first_name", "icontains"),

@@ -30,6 +30,7 @@ from .utils import get_travels_from_examinations
 class PatientListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
     template_name = "patients/list.html"
     model = Patient
+    paginate_by = 10
     search_fields = [
         ("first_name", "icontains"),
         ("last_name", "icontains"),
@@ -86,6 +87,7 @@ class PatientUpdateView(DoctorMixin, UpdateView):
 class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView):
     template_name = "examinations/list.html"
     model = Examination
+    paginate_by = 10
     search_fields = [
         ("afflictions", "in"),
         ("parasites", "in"),

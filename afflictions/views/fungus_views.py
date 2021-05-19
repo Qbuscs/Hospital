@@ -35,6 +35,7 @@ class FungusUpdateView(DoctorMixin, UpdateView):
 class FungusListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
     template_name = "fungi/list.html"
     model = Fungus
+    paginate_by = 10
     search_fields = [("name", "icontains"), ("antibiotics_resistance", "icontains")]
 
     def get_csv_mapping(self):

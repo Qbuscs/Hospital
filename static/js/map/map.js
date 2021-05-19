@@ -46,7 +46,6 @@ function loadMap(){
 
   function transform_geometry(element) {
     var current_projection = new ol.proj.Projection({code: "EPSG:4326"});
-    console.log(current_projection.units);
     var new_projection = osmLayer.getSource().getProjection();
 
     element.getGeometry().transform(current_projection, new_projection);
@@ -55,8 +54,6 @@ function loadMap(){
   patients_features.forEach(feature => {
     transform_geometry(feature);
   });
-
-  console.log(patients_features);
 
   var patients = new ol.source.Vector({
       features: patients_features
@@ -87,6 +84,9 @@ function loadMap(){
         zoom: 2.5
       })
   });
+
+  var mousePosition = new ol.control.MousePosition();
+  map.addControl(mousePosition);
     
   function choroMap()
   {

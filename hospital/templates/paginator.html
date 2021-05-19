@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col"></div>
+    <div class="col">
+      {% if is_paginated %}
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+          {% else %}
+            <li class="disabled page-item"><a class="page-link">&laquo;</a></li>
+          {% endif %}
+          {% if page_obj.number > 16 %}
+            <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="goToPage({{1}})">{{ 1 }}</a></li>
+            <li class="disabled page-item"><a class="page-link">...</a></li>
+          {% endif %}
+          {% for i in paginator.page_range %}
+            {% if page_obj.number == i %}
+              <li class="active page-item"><a class="disabled page-link">{{ i }}</a></li>
+            {% elif i > page_obj.number|add:"-16" and i < page_obj.number|add:"16"%}
+              <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="goToPage({{i}})">{{ i }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.number < page_obj.paginator.num_pages|add:"-16" %}
+            <li class="disabled page-item"><a class="page-link">...</a></li>
+            <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="goToPage({{page_obj.paginator.num_pages}})">{{ page_obj.paginator.num_pages }}</a></li>
+          {% endif %}
+          {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+          {% else %}
+            <li class="disabled page-item"><a class="page-link">&raquo;</a></li>
+          {% endif %}
+        </ul>
+      {% endif %}
+
+    </div>
+    <div class="col"></div>
+  </div>
+
+<script>
+  function replaceQueryParam(param, newval, search) {
+      var regex = new RegExp("([?;&])" + param + "[^&;]*[;&]?");
+      var query = search.replace(regex, "$1").replace(/&$/, '');
+      return (query.length > 2 ? query + "&" : "?") + (newval ? param + "=" + newval : '');
+  }
+
+  function goToPage(page){
+    window.location = replaceQueryParam("page", page, window.location.search);
+    return false;
+  }
+</script>

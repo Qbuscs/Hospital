@@ -112,6 +112,9 @@
       </table>
     </div>
   </div>
+
+  {% include "paginator.html" %}
+  
 </div>
 {% endblock %}
 
@@ -131,6 +134,7 @@
           "format": "yyyy-mm-dd",
       });
   });
+
 </script>
 <script src="{% static 'js/openlayers/ol.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/openlayers/ol3-layerswitcher.js' %}" type="text/javascript"></script>
@@ -142,6 +146,7 @@
   $("#map").css("display", "none");
 
   patients_features = [];
+  var start = new Date();
   {% for coord in coords %}
     patients_features.push(
       
@@ -151,6 +156,8 @@
       
     );
   {% endfor %}
+  var end = new Date();
+  console.log("Creating points: ", end.getTime() - start.getTime());
 
   var countries = new ol.source.Vector({
     url: 'http://127.0.0.1:8000/static/vectors/World.geojson', //TODO: Change that url

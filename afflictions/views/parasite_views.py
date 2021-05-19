@@ -36,6 +36,7 @@ class ParasiteUpdateView(DoctorMixin, UpdateView):
 class ParasiteListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
     template_name = "parasites/list.html"
     model = Parasite
+    paginate_by = 10
     search_fields = [("species", "icontains"), ("subtype", "icontains")]
 
 
