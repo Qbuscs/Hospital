@@ -3,6 +3,7 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 from users.mixins import DoctorMixin, InternMixin
 
 from afflictions.models import Parasite
+from afflictions.utils import get_parasite_species_list_safe
 from hospital.mixins import OrderableMixin, SearchableMixin, CSVMixin
 
 
@@ -15,6 +16,8 @@ class ParasiteCreateView(DoctorMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["operation"] = "create"
+        context["parasite_species"] = get_parasite_species_list_safe()
+        print(context["parasite_species"])
         return context
 
 
@@ -30,6 +33,8 @@ class ParasiteUpdateView(DoctorMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["operation"] = "edit"
+        context["parasite_species"] = get_parasite_species_list_safe()
+        print(context["parasite_species"])
         return context
 
 

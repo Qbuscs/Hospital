@@ -1,8 +1,17 @@
 {% extends "create_base.html" %}
-{% load common i18n %}
+{% load common i18n static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/autocomplete.css' %}">
+{% endblock %}
 
 {% block scripts %}
 {% select2ify "id_afflictions" %}
+<script src="{% static 'js/autocomplete.js' %}"></script>
+<script>
+    var species = {{parasite_species|safe}}
+    autocomplete(document.getElementById("id_species"), species);
+</script>
 {% endblock %}
 
 {% block card_header %}
