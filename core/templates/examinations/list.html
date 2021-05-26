@@ -24,6 +24,7 @@
   <div class="row">
     <div class="col-1"></div>
     <div class="col">
+      <div id="wait-message" class="span12 text-center"><h3>Trwa wczytywanie mapy. Może to zająć kilka sekund.</h3></div>
       <div id="map" class="map"></div>
     </div>
     <div class="col-1"></div>
@@ -144,6 +145,7 @@
 <script>
 
   $("#map").css("display", "none");
+  $("#wait-message").css("display", "none");
 
   patients_features = [];
   var start = new Date();

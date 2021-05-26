@@ -1,6 +1,7 @@
 function loadMap(){
 
   $("#map").css("display", "block");
+  $("#wait-message").css("display", "block");
   $("#map-btn").css("display", "none");
 
   var patientsStyle = new ol.style.Style({
@@ -84,14 +85,12 @@ function loadMap(){
         zoom: 2.5
       })
   });
-
-  var mousePosition = new ol.control.MousePosition();
-  map.addControl(mousePosition);
     
   function choroMap()
   {
       var choropleth = calcPointsinPolygons(patients,countries);
       overlayGroup.getLayers().push(choropleth);
+      $("#wait-message").css("display", "none");
   }
 
   var sourceEventListener = countries.once('change', function(e) {
