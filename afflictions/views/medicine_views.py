@@ -43,8 +43,3 @@ class MedicineDeleteView(DoctorMixin, DeleteView):
     template_name = "medicine/confirm_delete.html"
     model = Medicine
     success_url = reverse_lazy("medicine_list")
-
-
-class MedicineDetailView(InternMixin, DetailView):
-    template_name = "medicine/detail.html"
-    model = Medicine

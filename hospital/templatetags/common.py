@@ -13,6 +13,10 @@ def bool_unknown(label, val):
 def select2ify(id, breakline=False):
     return {"id": id, "breakline": breakline}
 
+@register.inclusion_tag("tags/select2ify_like.html")
+def select2ify_like(id, breakline=False):
+    return {"id": id, "breakline": breakline}
+
 @register.inclusion_tag("tags/orderable_header.html")
 def orderable_header(name, label, width=None):
     return {"name": name, "label": label, "width": width}

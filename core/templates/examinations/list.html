@@ -10,7 +10,6 @@
 {% block content %}
 {% has_doctor_rights user as allowed %}
 <div class="container-fluid">
-
   <div class="row">
     <div class="col">
       <h1>{% trans 'Badania' %}</h1>
@@ -44,11 +43,13 @@
         <tr>
           {% orderable_header "patient__last_name" "Pacjent" %}
           {% orderable_header "date" "Data" %}
+          <th>{% trans "Leki" %}</th>
           <th>{% trans "Objawy" %}</th>
           <th>{% trans "Choroby" %}</th>
           <th>{% trans "Pasożyty" %}</th>
           <th>{% trans "Grzyby" %}</th>
-          <th>{% trans "Leki" %}</th>
+          <th>{% trans "Bakterie" %}</th>
+          <th>{% trans "Wirusy" %}</th>
           <th>{% trans "Zwierzęta" %}</th>
           <th>{% trans "Podróże" %}</th>
           <th>{% trans "Badania morfologiczne" %}</th>
@@ -61,6 +62,11 @@
           <tr>
             <th>{{ examination.patient.first_name }} {{ examination.patient.last_name }}</th>
             <th>{{ examination.date }}</th>
+            <th>
+              {% for medicine in examination.medicines.all %}
+                {{ medicine }}<br>
+              {% endfor %}
+            </th>
             <th>
               {% for affliction in examination.afflictions.all %}
                 {{ affliction }}<br>
@@ -78,12 +84,37 @@
             </th>
             <th>
               {% for fungus in examination.fungi.all %}
-                {{ fungus }}<br>
+                {{ fungus }} - 
+                {% for medicine in fungus.high_resistance.all %}
+                  <span class="text-danger">{{ medicine }}</span>,
+                {% endfor %}
+                {% for medicine in fungus.mid_resistance.all %}
+                  <span class="text-warning">{{ medicine }}</span>,
+                {% endfor %}
+                {% for medicine in fungus.low_resistance.all %}
+                  <span class="text-success">{{ medicine }}</span>,
+                {% endfor %}
+                <br>
               {% endfor %}
             </th>
             <th>
-              {% for medicine in examination.medicines.all %}
-                {{ medicine }}<br>
+              {% for bacteria in examination.bacteria.all %}
+                {{ bacteria }} - 
+                {% for medicine in bacteria.high_resistance.all %}
+                <span class="text-danger">{{ medicine }}</span>,
+                {% endfor %}
+                {% for medicine in bacteria.mid_resistance.all %}
+                <span class="text-warning">{{ medicine }}</span>,
+                {% endfor %}
+                {% for medicine in bacteria.low_resistance.all %}
+                <span class="text-success">{{ medicine }}</span>,
+                {% endfor %}
+                <br>
+              {% endfor %}
+            </th>
+            <th>
+              {% for virus in examination.viruses.all %}
+                {{ virus }}<br>
               {% endfor %}
             </th>
             <th>
@@ -120,10 +151,18 @@
 {% endblock %}
 
 {% block scripts %}
-{% select2ify "id_afflictions" breakline=True %}
-{% select2ify "id_parasites" breakline=True %}
-{% select2ify "id_sicknesses__sickness" breakline=True %}
-{% select2ify "id_fungi__fungus" breakline=True %}
+{% select2ify "id_afflictions__OR" breakline=True %}
+{% select2ify "id_afflictions__AND" breakline=True %}
+{% select2ify "id_parasites__OR" breakline=True %}
+{% select2ify "id_parasites__AND" breakline=True %}
+{% select2ify "id_sicknesses__sickness__OR" breakline=True %}
+{% select2ify "id_sicknesses__sickness__AND" breakline=True %}
+{% select2ify "id_fungi__fungus__OR" breakline=True %}
+{% select2ify "id_fungi__fungus__AND" breakline=True %}
+{% select2ify "id_bacteria__bacteria__OR" breakline=True %}
+{% select2ify "id_bacteria__bacteria__AND" breakline=True %}
+{% select2ify "id_viruses__OR" breakline=True %}
+{% select2ify "id_viruses__AND" breakline=True %}
 <script>
   $ (document).ready( function() {
       $("*[name='date__gte']").datepicker({

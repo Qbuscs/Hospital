@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from afflictions.models import (
     Affliction,
     Parasite,
+    Virus
 )
 
 
@@ -45,6 +46,18 @@ class Patient(models.Model):
 
 
 class Examination(models.Model):
+    HISTO_NONE = 0
+    HISTO_WEAK = 1
+    HISTO_MID = 2
+    HISTO_HIGH = 3
+
+    HISTO_CHOICES = (
+        (HISTO_NONE, _("brak")),
+        (HISTO_WEAK, _("mało")),
+        (HISTO_MID, _("umiarkowany")),
+        (HISTO_HIGH, _("intensywnie")),
+    )
+
     patient = models.ForeignKey(
         Patient,
         verbose_name=_("pacjent"),
@@ -54,26 +67,54 @@ class Examination(models.Model):
         blank=False
     )
     date = models.DateField(_("data"), null=False)
-    afflictions = models.ManyToManyField(Affliction, verbose_name=_("objawy"), related_name="examinations", blank=True)
+    afflictions = models.ManyToManyField(Affliction, related_name="examinations", verbose_name=_("objawy"), blank=True)
     parasites = models.ManyToManyField(Parasite, related_name="examinations", verbose_name=_("pasożyty"), blank=True)
+    viruses = models.ManyToManyField(Virus, related_name="examinations", verbose_name=_("wirusy"), blank=True)
     note = models.TextField(_("Notatka"), max_length=1000, blank=True, null=True)
 
     # histopathological examinations
-    collagen_layer_thickening = models.BooleanField(
+    collagen_layer_thickening = models.PositiveSmallIntegerField(
         _("pogrubienie warstwy kolagenu u podstawy komórek nabłonka"),
+        choices=HISTO_CHOICES,
         null=True,
         blank=True
     )
-    increased_intraepithelial_lymphocytes = models.BooleanField(
+    increased_intraepithelial_lymphocytes = models.PositiveSmallIntegerField(
         _("zwiększona liczba limfocytów śródnabłonkowych"),
+        choices=HISTO_CHOICES,
         null=True,
         blank=True
     )
-    lymphocytes_infiltration = models.BooleanField(_("naciek z limfocytów"), null=True, blank=True)
-    plasmocytes_infiltration = models.BooleanField(_("naciek z plazmocytów"), null=True, blank=True)
-    eosinophils_infiltration = models.BooleanField(_("naciek z eozynofili"), null=True, blank=True)
-    mast_cells_infiltration = models.BooleanField(_("naciek z komórek tucznych"), null=True, blank=True)
-    neutrocytes_infiltration = models.BooleanField(_("naciek z neutrocytów"), null=True, blank=True)
+    lymphocytes_infiltration = models.PositiveSmallIntegerField(
+        _("naciek z limfocytów"),
+        choices=HISTO_CHOICES,
+        null=True,
+        blank=True
+    )
+    plasmocytes_infiltration = models.PositiveSmallIntegerField(
+        _("naciek z plazmocytów"),
+        choices=HISTO_CHOICES,
+        null=True,
+        blank=True
+    )
+    eosinophils_infiltration = models.PositiveSmallIntegerField(
+        _("naciek z eozynofili"),
+        choices=HISTO_CHOICES,
+        null=True,
+        blank=True
+    )
+    mast_cells_infiltration = models.PositiveSmallIntegerField(
+        _("naciek z komórek tucznych"),
+        choices=HISTO_CHOICES,
+        null=True,
+        blank=True
+    )
+    neutrocytes_infiltration = models.PositiveSmallIntegerField(
+        _("naciek z neutrocytów"),
+        choices=HISTO_CHOICES,
+        null=True,
+        blank=True
+    )
 
     # TODO: morfologia
 

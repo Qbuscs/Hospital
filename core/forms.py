@@ -1,5 +1,5 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, ButtonHolder, Submit
+from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, ButtonHolder, Submit, HTML
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from hospital.layouts import Formset
@@ -25,12 +25,17 @@ class ExaminationForm(forms.ModelForm):
                 Field("date", autocomplete="off"),
                 Field("afflictions", style="width: 100%"),
                 Field("parasites", style="width: 100%"),
+                Field("viruses", style="width: 100%"),
                 Div(
                     Div(Fieldset(_("Choroby"), Formset("sicknesses")), css_class="card-body"),
                     css_class="card"
                 ),
                 Div(
                     Div(Fieldset(_("Grzyby"), Formset("fungi")), css_class="card-body"),
+                    css_class="card"
+                ),
+                Div(
+                    Div(Fieldset(_("Bakterie"), Formset("bacteria")), css_class="card-body"),
                     css_class="card"
                 ),
                 Div(
@@ -58,6 +63,9 @@ class ExaminationForm(forms.ModelForm):
                 Field("neutrocytes_infiltration"),
                 Field("note", style="width: 100%"),
                 HTML("<br>"),
-                ButtonHolder(Submit("submit", _("Zapisz")))
+                ButtonHolder(
+                    Submit("submit", _("Zapisz")),
+                    HTML(_('<button type="button" class="btn btn-secondary" onclick="history.back()">Wróć</button>'))
+                )
             )
         )

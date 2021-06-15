@@ -33,10 +33,20 @@ class Travel(models.Model):
 
     VISIT_PROFESSIONAL = 0
     VISIT_TOURISTIC = 1
+    VISIT_RELATIVES = 2
 
     VISIT_CHOICES = (
         (VISIT_PROFESSIONAL, _("zawodowy")),
         (VISIT_TOURISTIC, _("turystyczny")),
+        (VISIT_RELATIVES, _("do bliskich")),
+    )
+
+    SPECIFICITY_YES = 0
+    SPECIFICITY_NO = 1
+
+    SPECIFICITY_CHOICES = (
+        (SPECIFICITY_YES, _("swoista")),
+        (SPECIFICITY_NO, _("nieswoista"))
     )
 
     examination = models.ForeignKey(Examination, related_name="travels", on_delete=models.CASCADE, null=False)
@@ -46,6 +56,13 @@ class Travel(models.Model):
     food = models.PositiveSmallIntegerField(_("odżywianie"), choices=FOOD_CHOICES, null=True, blank=True)
     drinks = models.PositiveSmallIntegerField(_("napoje"), choices=DRINKS_CHOICES, null=True, blank=True)
     visit = models.PositiveSmallIntegerField(_("rodzaj wizyty"), choices=VISIT_CHOICES, null=True, blank=True)
+    specialist_advice = models.BooleanField(_("Porada specjalistycznej"), null=True, blank=False)
+    specificity = models.PositiveSmallIntegerField(
+        _("Profilaktyka"),
+        choices=SPECIFICITY_CHOICES,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"{self.country.name} ({self.date_start} " + gettext("do") + f" {self.date_end})"

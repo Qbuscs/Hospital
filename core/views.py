@@ -1,6 +1,7 @@
 import csv
 
-from afflictions.forms import (FungusExaminationFormSet,
+from afflictions.forms import (BacteriaExaminationFormSet,
+                               FungusExaminationFormSet,
                                MedicineExaminationFormSet,
                                SicknessExaminationFormSet)
 from afflictions import models as afflictions_models
@@ -88,21 +89,48 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
     template_name = "examinations/list.html"
     model = Examination
     paginate_by = 10
-    search_fields = [
-        ("afflictions", "in"),
-        ("parasites", "in"),
-    ]
+    search_fields = []
 
     def get_extra_search_fields(self):
         date_from_field = DateField(label=gettext("Data od"), widget=TextInput(attrs={"autocomplete": "off"}))
         date_to_field = DateField(label=gettext("Data do"), widget=TextInput(attrs={"autocomplete": "off"}))
         first_name_field = Patient._meta.get_field("first_name").formfield()
         last_name_field = Patient._meta.get_field("last_name").formfield()
-        sickness_field = ModelMultipleChoiceField(
-            queryset=afflictions_models.Sickness.objects.all(), label=gettext("Choroby")
+        afflictions_field_or = ModelMultipleChoiceField(
+            queryset=afflictions_models.Affliction.objects.all(), label=gettext("Objawy (dowolne)")
         )
-        fungus_field = ModelMultipleChoiceField(
-            queryset=afflictions_models.Fungus.objects.all(), label=gettext("Grzyby")
+        afflictions_field_and = ModelMultipleChoiceField(
+            queryset=afflictions_models.Affliction.objects.all(), label=gettext("Objawy (wszystkie)")
+        )
+        parasites_field_or = ModelMultipleChoiceField(
+            queryset=afflictions_models.Parasite.objects.all(), label=gettext("Pasożyty (dowolne)")
+        )
+        parasites_field_and = ModelMultipleChoiceField(
+            queryset=afflictions_models.Parasite.objects.all(), label=gettext("Pasożyty (wszystkie)")
+        )
+        sickness_field_or = ModelMultipleChoiceField(
+            queryset=afflictions_models.Sickness.objects.all(), label=gettext("Choroby (dowolne)")
+        )
+        sickness_field_and = ModelMultipleChoiceField(
+            queryset=afflictions_models.Sickness.objects.all(), label=gettext("Choroby (wszystkie)")
+        )
+        fungus_field_or = ModelMultipleChoiceField(
+            queryset=afflictions_models.Fungus.objects.all(), label=gettext("Grzyby (dowolne)")
+        )
+        fungus_field_and = ModelMultipleChoiceField(
+            queryset=afflictions_models.Fungus.objects.all(), label=gettext("Grzyby (wszystkie)")
+        )
+        bacteria_field_or = ModelMultipleChoiceField(
+            queryset=afflictions_models.Bacteria.objects.all(), label=gettext("Bakterie (dowolne)")
+        )
+        bacteria_field_and = ModelMultipleChoiceField(
+            queryset=afflictions_models.Bacteria.objects.all(), label=gettext("Bakterie (wszystkie)")
+        )
+        virus_field_or = ModelMultipleChoiceField(
+            queryset=afflictions_models.Virus.objects.all(), label=gettext("Wirusy (dowolne)")
+        )
+        virus_field_and = ModelMultipleChoiceField(
+            queryset=afflictions_models.Virus.objects.all(), label=gettext("Wirusy (wszystkie)")
         )
         country_field = Travel._meta.get_field("country").formfield()
 
@@ -110,8 +138,18 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
         last_name_field.label = gettext("Nazwisko pacjenta")
         country_field.label = gettext("Kraj podróży")
         return {
-            "sicknesses__sickness": (sickness_field, "in"),
-            "fungi__fungus": (fungus_field, "in"),
+            "afflictions__OR": (afflictions_field_or, "in"),
+            "afflictions__AND": (afflictions_field_and, "in"),
+            "parasites__OR": (parasites_field_or, "in"),
+            "parasites__AND": (parasites_field_and, "in"),
+            "sicknesses__sickness__OR": (sickness_field_or, "in"),
+            "sicknesses__sickness__AND": (sickness_field_and, "in"),
+            "fungi__fungus__OR": (fungus_field_or, "in"),
+            "fungi__fungus__AND": (fungus_field_and, "in"),
+            "bacteria__bacteria__OR": (bacteria_field_or, "in"),
+            "bacteria__bacteria__AND": (bacteria_field_and, "in"),
+            "viruses__OR": (virus_field_or, "in"),
+            "viruses__AND": (virus_field_and, "in"),
             "date__gte": (date_from_field, None),
             "date__lte": (date_to_field, None),
             "patient__first_name": (first_name_field, "icontains"),
@@ -123,10 +161,10 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
         queryset = super().get_queryset()
         queryset = queryset.select_related("patient")
         queryset = queryset.prefetch_related(
-            "afflictions", "parasites", "sicknesses", "sicknesses__sickness",
+            "afflictions", "parasites", "viruses", "sicknesses", "sicknesses__sickness",
             "fungi", "fungi__fungus", "medicines", "medicines__medicine",
             "travels", "morphologies", "morphologies__morphology", "animals",
-            "animals__animal"
+            "animals__animal", "bacteria__bacteria"
         )
         return queryset
 
@@ -179,6 +217,7 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
             gettext("choroby"),
             gettext("pasożyty (gatunek, subtyp)"),
             gettext("grzyby (gatunek, ilość)"),
+            gettext("bakterie"),
             gettext("leki"),
             gettext("zwierzęta (gatunek, rodzaj kontaktu, kontakt ze śliną, kontakt z odchodami)"),
             gettext("podróże (kraj, start, powrót)"),
@@ -198,7 +237,8 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
                 list(obj.afflictions.values("name")),
                 list(obj.sicknesses.values("sickness__name")),
                 list(obj.parasites.values("species", "subtype")),
-                list(obj.fungi.values("fungus__name", "amount")),
+                list(obj.fungi.values("fungus__name", "amount", "high_resistance", "mid_resistance", "low_resistance")),
+                list(obj.bacteria.values("bacteria__name", "high_resistance", "mid_resistance", "low_resistance")),
                 list(obj.medicines.values("medicine__name", "amount", "unit")),
                 self.build_animals_row(obj),
                 self.build_travels_row(obj),
@@ -239,10 +279,11 @@ class ExaminationFormView:
         animals = context["animals"]
         travels = context["travels"]
         morphologies = context["morphologies"]
+        bacteria = context["bacteria"]
         try:
             with transaction.atomic():
                 self.object = form.save()
-                for related in [sicknesses, medicines, fungi, animals, travels, morphologies]:
+                for related in [sicknesses, medicines, fungi, animals, travels, morphologies, bacteria]:
                     if related.is_valid():
                         related.instance = self.object
                         related.save()
@@ -264,6 +305,7 @@ class ExaminationCreateView(DoctorMixin, ExaminationFormView, CreateView):
             context["animals"] = AnimalExaminationFormSet(self.request.POST)
             context["travels"] = TravelFormSet(self.request.POST)
             context["morphologies"] = MorphologyExaminationFormSet(self.request.POST)
+            context["bacteria"] = BacteriaExaminationFormSet(self.request.POST)
         else:
             context["sicknesses"] = SicknessExaminationFormSet()
             context["medicines"] = MedicineExaminationFormSet()
@@ -271,6 +313,7 @@ class ExaminationCreateView(DoctorMixin, ExaminationFormView, CreateView):
             context["animals"] = AnimalExaminationFormSet()
             context["travels"] = TravelFormSet()
             context["morphologies"] = MorphologyExaminationFormSet()
+            context["bacteria"] = BacteriaExaminationFormSet()
         context["operation"] = "create"
         return context
 
@@ -285,6 +328,7 @@ class ExaminationUpdateView(DoctorMixin, ExaminationFormView, UpdateView):
             context["animals"] = AnimalExaminationFormSet(self.request.POST, instance=self.object)
             context["travels"] = TravelFormSet(self.request.POST, instance=self.object)
             context["morphologies"] = MorphologyExaminationFormSet(self.request.POST, instance=self.object)
+            context["bacteria"] = BacteriaExaminationFormSet(self.request.POST, instance=self.object)
         else:
             context["sicknesses"] = SicknessExaminationFormSet(instance=self.object)
             context["medicines"] = MedicineExaminationFormSet(instance=self.object)
@@ -292,6 +336,7 @@ class ExaminationUpdateView(DoctorMixin, ExaminationFormView, UpdateView):
             context["animals"] = AnimalExaminationFormSet(instance=self.object)
             context["travels"] = TravelFormSet(instance=self.object)
             context["morphologies"] = MorphologyExaminationFormSet(instance=self.object)
+            context["bacteria"] = BacteriaExaminationFormSet(instance=self.object)
         context["operation"] = "edit"
         return context
 

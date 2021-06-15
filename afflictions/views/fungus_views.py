@@ -36,10 +36,7 @@ class FungusListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, Lis
     template_name = "fungi/list.html"
     model = Fungus
     paginate_by = 10
-    search_fields = [("name", "icontains"), ("antibiotics_resistance", "icontains")]
-
-    def get_csv_mapping(self):
-        return {"antibiotics_resistance": lambda x: Fungus.ANTIBIOTICS_RESISTANCE_CHOICES[x][1]}
+    search_fields = [("name", "icontains")]
 
 
 class FungusDeleteView(DoctorMixin, DeleteView):

@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext
 
 
 class Affliction(models.Model):
@@ -44,12 +45,11 @@ class MedicineExamination(models.Model):
         related_name="medicines",
         on_delete=models.CASCADE
     )
-    amount = models.FloatField(_("ilość"), null=True, blank=True)
-    # TODO: Może zrobic z tego choice field (mg, tabletek, kropli, itd.)?
-    unit = models.CharField(_("jednostka"), null=True, blank=True, max_length=50)
+    intake_time = models.PositiveIntegerField(_("Czas przyjmowania (tygodnie)"), null=True, blank=True)
 
     def __str__(self):
-        return str(self.medicine) + f" - {self.amount} {self.unit}"
+        days = self.intake_time if self.intake_time else "???"
+        return str(self.medicine) + f" - {days} " + gettext("dni") 
 
 
 class SicknessExamination(models.Model):
@@ -70,16 +70,6 @@ class SicknessExamination(models.Model):
 
 
 class Fungus(models.Model):
-    ANTIBIOTICS_RESISTANCE_LOW = 0
-    ANTIBIOTICS_RESISTANCE_MEDIUM = 1
-    ANTIBIOTICS_RESISTANCE_HIGH = 2
-
-    ANTIBIOTICS_RESISTANCE_CHOICES = (
-        (ANTIBIOTICS_RESISTANCE_LOW, _("niska")),
-        (ANTIBIOTICS_RESISTANCE_MEDIUM, _("średnia")),
-        (ANTIBIOTICS_RESISTANCE_HIGH, _("wysoka")),
-    )
-
     afflictions = models.ManyToManyField(
         Affliction,
         verbose_name=_("objawy"),
@@ -87,10 +77,6 @@ class Fungus(models.Model):
         blank=True,
     )
     name = models.CharField(_("Nazwa"), max_length=200, null=False, blank=False)
-    antibiotics_resistance = models.PositiveSmallIntegerField(
-        _("odporność na antybiotyki"),
-        choices=ANTIBIOTICS_RESISTANCE_CHOICES
-    )
 
     def __str__(self):
         return f"{self.name}"
@@ -102,11 +88,34 @@ class Fungus(models.Model):
 
 class FungusExamination(models.Model):
     fungus = models.ForeignKey(Fungus, verbose_name=_("grzyb"), related_name="examinations", on_delete=models.PROTECT)
-    examination = models.ForeignKey("core.Examination", verbose_name=_("badanie"), related_name="fungi", on_delete=models.CASCADE)
+    examination = models.ForeignKey(
+        "core.Examination",
+        verbose_name=_("badanie"),
+        related_name="fungi",
+        on_delete=models.CASCADE
+    )
     amount = models.FloatField(_("ilość"))
+    high_resistance = models.ManyToManyField(
+        Medicine,
+        verbose_name=_("oporny na"),
+        related_name="examinations_fungi_high_resistance",
+        blank=True
+    )
+    mid_resistance = models.ManyToManyField(
+        Medicine,
+        verbose_name=_("średnio wrażliwy na"),
+        related_name="examinations_fungi_mid_resistance",
+        blank=True
+    )
+    low_resistance = models.ManyToManyField(
+        Medicine,
+        verbose_name=_("wrażliwy na"),
+        related_name="examinations_fungi_low_resistance",
+        blank=True
+    )
 
     def __str__(self):
-        return f"{self.fungus} - {self.amount}"
+        return f"{self.fungus} ({self.amount})"
 
     class Meta:
         verbose_name = _("grzyb w badaniu")
@@ -129,3 +138,65 @@ class Parasite(models.Model):
         verbose_name = _("pasożyt")
         verbose_name_plural = _("pasożyty")
         unique_together = (("species", "subtype"))
+
+
+class Bacteria(models.Model):
+    name = models.CharField(_("Gatunek"), max_length=200, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = _("bakteria")
+        verbose_name_plural = _("bakterie")
+
+
+class BacteriaExamination(models.Model):
+    bacteria = models.ForeignKey(
+        Bacteria,
+        verbose_name=_("bakteria"),
+        related_name="examinations",
+        on_delete=models.PROTECT
+    )
+    examination = models.ForeignKey(
+        "core.Examination",
+        verbose_name=_("badanie"),
+        related_name="bacteria",
+        on_delete=models.CASCADE
+    )
+    high_resistance = models.ManyToManyField(
+        Medicine,
+        verbose_name=_("oporny na"),
+        related_name="examination_bacteria_high_resistance",
+        blank=True
+    )
+    mid_resistance = models.ManyToManyField(
+        Medicine,
+        verbose_name=_("średnio wrażliwy na"),
+        related_name="examination_bacteria_mid_resistance",
+        blank=True
+    )
+    low_resistance = models.ManyToManyField(
+        Medicine,
+        verbose_name=_("wrażliwy na"),
+        related_name="examination_bacteria_low_resistance",
+        blank=True
+    )
+
+    def __str__(self):
+        return f"{self.bacteria}"
+
+    class Meta:
+        verbose_name = _("bakteria w badaniu")
+        verbose_name_plural = _("bakterie w badaniu")
+
+
+class Virus(models.Model):
+    name = models.CharField(_("Gatunek"), max_length=200, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = _("wirus")
+        verbose_name_plural = _("wirus")

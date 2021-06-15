@@ -16,6 +16,7 @@
                     {% csrf_token %} 
                     {% bootstrap_form form %} 
                     <button type="submit" class="btn btn-primary">{% trans 'Zapisz' %}</button>
+                    <button type="button" class="btn btn-secondary" onclick="history.back()">{% trans 'Wróć' %}</button>
                     {% endblock %}
                 </form>
             </div>

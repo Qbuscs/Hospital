@@ -62,21 +62,32 @@ class SearchableMixin:
         for field in lookups:
             field_name = field[0]
             operation = field[1]
+            or_lookup = False
             if operation:
                 operation = "__" + operation
             else:
                 operation = ""
             values = self.request.GET.getlist(field_name)
+            if field_name[-4:] == "__OR":
+                or_lookup = True
+                field_name = field_name[:-4]
+            elif field_name[-5:] == "__AND":
+                field_name = field_name[:-5]
             if not values or len(values) == 0:
                 continue
             for val in values:
                 if not val:
                     continue
                 if f"{field_name}{operation}" not in filters:
-                    filters[f"{field_name}{operation}"] = val
+                    if or_lookup:
+                        filters[f"{field_name}{operation}"] = [val]
+                    else:
+                        filters[f"{field_name}{operation}"] = val
+                elif or_lookup:
+                    filters[f"{field_name}{operation}"].append(val)
                 else:
                     queryset = queryset.filter(**{f"{field_name}{operation}": val})
-        queryset = queryset.filter(**filters)
+        queryset = queryset.filter(**filters).distinct()
         return queryset
 
 

@@ -78,14 +78,14 @@
             <thead class="thead-dark">
               <tr>
                 <th width="50%">{% trans "Lek" %}</th>
-                <th width="50%">{% trans "Dawka" %}</th>
+                <th width="50%">{% trans "Czas przyjmowania" %}</th>
               </tr>
             </thead>
             <tbody>
                   {% for medicine in object.medicines.all %}
                   <tr>
                       <td>{{ medicine.medicine.name }}</td>
-                      <td>{{ medicine.amount }} {{ medicine.unit }}</td>
+                      <td>{{ medicine.intake_time|default_if_none:"???" }}</td>
                   </tr>
                   {% endfor %}
             </tbody>
@@ -98,8 +98,11 @@
         <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
-                <th width="50%">{% trans "Grzyb" %}</th>
-                <th width="50%">{% trans "Ilość" %}</th>
+                <th width="20%">{% trans "Grzyb" %}</th>
+                <th width="20%">{% trans "Ilość" %}</th>
+                <th width="20%">{% trans "Oporny na" %}</th>
+                <th width="20%">{% trans "Średnio wrażliwy na" %}</th>
+                <th width="20%">{% trans "Wrażliwy na" %}</th>
               </tr>
             </thead>
             <tbody>
@@ -107,11 +110,82 @@
                   <tr>
                       <td>{{ fungus.fungus.name }}</td>
                       <td>{{ fungus.amount }}</td>
+                      <td>
+                        {% for medicine in fungus.high_resistance.all %}
+                          {{ medicine.name }}<br>
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for medicine in fungus.mid_resistance.all %}
+                          {{ medicine.name }}<br>
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for medicine in fungus.low_resistance.all %}
+                          {{ medicine.name }}<br>
+                        {% endfor %}
+                      </td>
                   </tr>
                   {% endfor %}
             </tbody>
-          </table>
+        </table>
           {% endif %}
+
+          <p><span class="font-weight-bold">{% trans "Bakterie" %}: </span>
+            {% if not object.bacteria.exists %}{% trans "Brak" %}</p>
+            {% else %}</p>
+          <table class="table table-sm">
+              <thead class="thead-dark">
+                <tr>
+                  <th width="25%">{% trans "Bakteria" %}</th>
+                  <th width="25%">{% trans "Oporny na" %}</th>
+                  <th width="25%">{% trans "Średnio wrażliwy na" %}</th>
+                  <th width="25%">{% trans "Wrażliwy na" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                    {% for bacteria in object.bacteria.all %}
+                    <tr>
+                        <td>{{ bacteria.bacteria.name }}</td>
+                        <td>
+                          {% for medicine in bacteria.high_resistance.all %}
+                            {{ medicine.name }}<br>
+                          {% endfor %}
+                        </td>
+                        <td>
+                          {% for medicine in bacteria.mid_resistance.all %}
+                            {{ medicine.name }}<br>
+                          {% endfor %}
+                        </td>
+                        <td>
+                          {% for medicine in bacteria.low_resistance.all %}
+                            {{ medicine.name }}<br>
+                          {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+              </tbody>
+            </table>
+            {% endif %}
+          
+            <p><span class="font-weight-bold">{% trans "Wirusy" %}: </span>
+              {% if not object.viruses.exists %}{% trans "Brak" %}</p>
+              {% else %}</p>
+              <table class="table table-sm">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>{% trans "Wirus" %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                      {% for virus in object.viruses.all %}
+                      <tr>
+                          <td>{{ virus }}</td>
+                      </tr>
+                      {% endfor %}
+                </tbody>
+              </table>
+              {% endif %}  
 
         <p><span class="font-weight-bold">{% trans "Kontakty ze zwierzętami" %}: </span>
           {% if not object.animals.exists %}{% trans "Brak" %}</p>
@@ -119,10 +193,12 @@
         <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
-                <th width="25%">{% trans "Zwierzę" %}</th>
-                <th width="25%">{% trans "Rodzaj kontaktu" %}</th>
-                <th width="25%">{% trans "Kontakt ze śliną" %}</th>
-                <th width="25%">{% trans "Kontakt z odchodami" %}</th>
+                <th width="16.6%">{% trans "Zwierzę" %}</th>
+                <th width="16.6%">{% trans "Rodzaj kontaktu" %}</th>
+                <th width="16.6%">{% trans "Kontakt ze śliną" %}</th>
+                <th width="16.6%">{% trans "Kontakt z odchodami" %}</th>
+                <th width="16.6%">{% trans "Kontakt z krwią" %}</th>
+                <th width="16.6%">{% trans "Podrapania" %}</th>
               </tr>
             </thead>
             <tbody>
@@ -130,8 +206,10 @@
                   <tr>
                       <td>{{ animal.animal.name }}</td>
                       <td>{{ animal.get_contact_display }}</td>
-                      <td>{{ animal.saliva }}</td>
-                      <td>{{ animal.excrement }}</td>
+                      <td>{% bool_unknown "" animal.saliva %}</td>
+                      <td>{% bool_unknown "" animal.excrement %}</td>
+                      <td>{% bool_unknown "" animal.blood %}</td>
+                      <td>{% bool_unknown "" animal.scratches %}</td>
                   </tr>
                   {% endfor %}
             </tbody>
@@ -144,12 +222,14 @@
         <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
-                <th width="16%">{% trans "Kraj" %}</th>
-                <th width="16%">{% trans "Początek" %}</th>
-                <th width="16%">{% trans "Koniec" %}</th>
-                <th width="16%">{% trans "Odżywianie" %}</th>
-                <th width="16%">{% trans "Napoje" %}</th>
-                <th width="16%">{% trans "Rodzaj" %}</th>
+                <th>{% trans "Kraj" %}</th>
+                <th>{% trans "Początek" %}</th>
+                <th>{% trans "Koniec" %}</th>
+                <th>{% trans "Odżywianie" %}</th>
+                <th>{% trans "Napoje" %}</th>
+                <th>{% trans "Rodzaj" %}</th>
+                <th>{% trans "Korzystanie z porady specjalistycznej" %}</th>
+                <th>{% trans "Stosowanie profilaktyki" %}</th>
               </tr>
             </thead>
             <tbody>
@@ -158,9 +238,11 @@
                       <td>{{ travel.country.name }}</td>
                       <td>{{ travel.date_start }}</td>
                       <td>{{ travel.date_end }}</td>
-                      <td>{{ travel.get_food_display }}</td>
-                      <td>{{ travel.get_drinks_display }}</td>
-                      <td>{{ travel.get_visit_display }}</td>
+                      <td>{{ travel.get_food_display|default_if_none:"???" }}</td>
+                      <td>{{ travel.get_drinks_display|default_if_none:"???" }}</td>
+                      <td>{{ travel.get_visit_display|default_if_none:"???" }}</td>
+                      <td>{{ travel.specialist_advice|default_if_none:"???" }}</td>
+                      <td>{{ travel.get_specificity_display|default_if_none:"???" }}</td>
                   </tr>
                   {% endfor %}
             </tbody>

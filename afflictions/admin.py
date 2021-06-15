@@ -23,7 +23,7 @@ admin.site.register(Sickness, SicknessAdmin)
 
 
 class FungusAdmin(admin.ModelAdmin):
-    list_display = ["name", "antibiotics_resistance"]
+    list_display = ["name"]
 
 
 class FungusExaminationInlineAdmin(admin.TabularInline):

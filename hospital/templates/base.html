@@ -26,6 +26,8 @@
             <li class="nav-item"><a class="nav-link" href="{% url 'sickness_list'%}">{% trans 'Choroby' %}</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'parasite_list'%}">{% trans 'Pasożyty' %}</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'fungus_list'%}">{% trans 'Grzyby' %}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'bacteria_list'%}">{% trans 'Bakterie' %}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'virus_list'%}">{% trans 'Wirusy' %}</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'medicine_list'%}">{% trans 'Leki' %}</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'animal_list'%}">{% trans 'Zwierzęta' %}</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'patient_list'%}">{% trans 'Pacjenci' %}</a></li>
@@ -45,7 +47,7 @@
               <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">{% trans 'Zaloguj' %}</a></li>
             {% endif %}
             {% get_current_language as LANGUAGE_CODE %}
-            <li class="nav-item"><a class="nav-link" href="#">{{ LANGUAGE_CODE }}</a></li>
+            <!-- <li class="nav-item"><a class="nav-link" href="#">{{ LANGUAGE_CODE }}</a></li> -->
             {% endblock %}
           </ul>
         </nav>

@@ -30,6 +30,8 @@
 {% block scripts %}
 {% select2ify "id_afflictions" %}
 {% select2ify "id_parasites" %}
+{% select2ify "id_viruses" %}
+{% select2ify_like "resistance" %}
 <script>
 $ (document).ready( function() {
     $("*[class='dateinput']").datepicker({
@@ -48,6 +50,15 @@ $ (document).ready( function() {
         "startDate": "-5y",
         "format": "dd/mm/yyyy",
     });
+    $("<br>").insertAfter("label[for*='resistance']");
 });
+$("a[class='add-row']").click(function(){
+    $('[id*="resistance"]').select2();
+    $("label[for*='resistance']").each(function(){
+        if(!$(this).next().is("br")){
+            $("<br>").insertAfter(this);
+        }
+    })
+})
 </script>
 {% endblock %}

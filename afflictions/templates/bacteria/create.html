@@ -1,0 +1,13 @@
+{% extends "create_base.html" %}
+{% load common i18n %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block card_header %}
+    {% if operation == "create" %}
+        {% trans "Dodaj bakterię" %}
+    {% elif operation == "edit" %}
+        {% trans "Edytuj bakterię" %}
+    {% endif %}
+{% endblock %}

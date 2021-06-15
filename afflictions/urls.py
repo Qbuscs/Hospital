@@ -1,7 +1,8 @@
 from django.urls import path
 
-from .views import affliction_views, fungus_views, medicine_views, parasite_views, sickness_views
-
+from .views import (affliction_views, bacteria_views, fungus_views,
+                    medicine_views, parasite_views, sickness_views,
+                    virus_views)
 
 urlpatterns = [
     path("afflictions/", affliction_views.AfflictionListView.as_view(), name="affliction_list"),
@@ -17,7 +18,6 @@ urlpatterns = [
 
     path("medicines/", medicine_views.MedicineListView.as_view(), name="medicine_list"),
     path("medicines/create/", medicine_views.MedicineCreateView.as_view(), name="medicine_create"),
-    path("medicines/<pk>/", medicine_views.MedicineDetailView.as_view(), name="medicine_detail"),
     path("medicines/<pk>/delete/", medicine_views.MedicineDeleteView.as_view(), name="medicine_delete"),
     path("medicines/<pk>/edit/", medicine_views.MedicineUpdateView.as_view(), name="medicine_update"),
 
@@ -32,4 +32,16 @@ urlpatterns = [
     path("fungi/<pk>/", fungus_views.FungusDetailView.as_view(), name="fungus_detail"),
     path("fungi/<pk>/delete/", fungus_views.FungusDeleteView.as_view(), name="fungus_delete"),
     path("fungi/<pk>/edit/", fungus_views.FungusUpdateView.as_view(), name="fungus_update"),
+
+    path("bacteria/", bacteria_views.BacteriaListView.as_view(), name="bacteria_list"),
+    path("bacteria/create/", bacteria_views.BacteriaCreateView.as_view(), name="bacteria_create"),
+    path("bacteria/<pk>/", bacteria_views.BacteriaDetailView.as_view(), name="bacteria_detail"),
+    path("bacteria/<pk>/delete/", bacteria_views.BacteriaDeleteView.as_view(), name="bacteria_delete"),
+    path("bacteria/<pk>/edit/", bacteria_views.BacteriaUpdateView.as_view(), name="bacteria_update"),
+
+    path("viruses/", virus_views.VirusListView.as_view(), name="virus_list"),
+    path("viruses/create/", virus_views.VirusCreateView.as_view(), name="virus_create"),
+    path("viruses/<pk>/", virus_views.VirusDetailView.as_view(), name="virus_detail"),
+    path("viruses/<pk>/delete/", virus_views.VirusDeleteView.as_view(), name="virus_delete"),
+    path("viruses/<pk>/edit/", virus_views.VirusUpdateView.as_view(), name="virus_update"),
 ]

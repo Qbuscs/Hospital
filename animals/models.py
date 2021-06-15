@@ -31,6 +31,8 @@ class AnimalExamination(models.Model):
     contact = models.PositiveSmallIntegerField(_("kontakt"), choices=CONTACT_CHOICES)
     saliva = models.BooleanField(_("kontakt ze śliną"), null=True, blank=True)
     excrement = models.BooleanField(_("kontakt z odchodami"), null=True, blank=True)
+    blood = models.BooleanField(_("kontakt z krwią"), null=True, blank=True)
+    scratches = models.BooleanField(_("podrapania"), null=True, blank=True)
 
     def __str__(self):
         return str(self.animal)
