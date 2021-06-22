@@ -62,6 +62,8 @@ class SearchableMixin:
         for field in lookups:
             field_name = field[0]
             operation = field[1]
+            if field_name in self.search_fields_omitted:
+                continue
             or_lookup = False
             if operation:
                 operation = "__" + operation

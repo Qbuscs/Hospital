@@ -66,6 +66,9 @@ class Travel(models.Model):
 
     def __str__(self):
         return f"{self.country.name} ({self.date_start} " + gettext("do") + f" {self.date_end})"
+    
+    def days(self):
+        return (self.date_end - self.date_start).days
 
     class Meta:
         verbose_name = _("podróż")

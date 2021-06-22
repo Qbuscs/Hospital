@@ -1,31 +1,36 @@
 import csv
 
+from afflictions import models as afflictions_models
 from afflictions.forms import (BacteriaExaminationFormSet,
                                FungusExaminationFormSet,
                                MedicineExaminationFormSet,
                                SicknessExaminationFormSet)
-from afflictions import models as afflictions_models
 from animals.forms import AnimalExaminationFormSet
 from animals.models import AnimalExamination
 from django.contrib import messages
 from django.db import transaction
-from django.forms import ValidationError, DateField, ModelMultipleChoiceField, TextInput
+from django.forms import (ChoiceField, DateField, IntegerField,
+                          ModelChoiceField, ModelMultipleChoiceField,
+                          TextInput, ValidationError)
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext
-from django.shortcuts import render
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
-from hospital.mixins import OrderableMixin, SearchableMixin, CSVMixin
+from hospital.mixins import CSVMixin, OrderableMixin, SearchableMixin
+from hospital.utils import str_to_int_or_none
+from morphologies.forms import MorphologyExaminationFormSet
 from travels.forms import TravelFormSet
 from travels.models import Travel
 from travels.utils import get_coords
 from users.mixins import DoctorMixin, InternMixin
-from morphologies.forms import MorphologyExaminationFormSet
 
 from .forms import ExaminationForm
 from .models import Examination, Patient
-from .utils import get_travels_from_examinations
+from .utils import (filter_examinations_fungus_resistance,
+                    filter_examinations_travel_time,
+                    get_travels_from_examinations)
 
 
 class PatientListView(InternMixin, OrderableMixin, SearchableMixin, CSVMixin, ListView):
@@ -90,54 +95,78 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
     model = Examination
     paginate_by = 10
     search_fields = []
+    search_fields_omitted = (
+        "travel_time_country", "travel_time_days_min", "travel_time_days_max", "fungus_resistance_fungus",
+        "fungus_resistance_medicine", "fungus_resistance_resistance"
+    )
 
     def get_extra_search_fields(self):
         date_from_field = DateField(label=gettext("Data od"), widget=TextInput(attrs={"autocomplete": "off"}))
         date_to_field = DateField(label=gettext("Data do"), widget=TextInput(attrs={"autocomplete": "off"}))
         first_name_field = Patient._meta.get_field("first_name").formfield()
         last_name_field = Patient._meta.get_field("last_name").formfield()
-        afflictions_field_or = ModelMultipleChoiceField(
-            queryset=afflictions_models.Affliction.objects.all(), label=gettext("Objawy (dowolne)")
-        )
-        afflictions_field_and = ModelMultipleChoiceField(
-            queryset=afflictions_models.Affliction.objects.all(), label=gettext("Objawy (wszystkie)")
-        )
-        parasites_field_or = ModelMultipleChoiceField(
-            queryset=afflictions_models.Parasite.objects.all(), label=gettext("Pasożyty (dowolne)")
-        )
-        parasites_field_and = ModelMultipleChoiceField(
-            queryset=afflictions_models.Parasite.objects.all(), label=gettext("Pasożyty (wszystkie)")
-        )
-        sickness_field_or = ModelMultipleChoiceField(
-            queryset=afflictions_models.Sickness.objects.all(), label=gettext("Choroby (dowolne)")
-        )
-        sickness_field_and = ModelMultipleChoiceField(
-            queryset=afflictions_models.Sickness.objects.all(), label=gettext("Choroby (wszystkie)")
-        )
-        fungus_field_or = ModelMultipleChoiceField(
-            queryset=afflictions_models.Fungus.objects.all(), label=gettext("Grzyby (dowolne)")
-        )
-        fungus_field_and = ModelMultipleChoiceField(
-            queryset=afflictions_models.Fungus.objects.all(), label=gettext("Grzyby (wszystkie)")
-        )
-        bacteria_field_or = ModelMultipleChoiceField(
-            queryset=afflictions_models.Bacteria.objects.all(), label=gettext("Bakterie (dowolne)")
-        )
-        bacteria_field_and = ModelMultipleChoiceField(
-            queryset=afflictions_models.Bacteria.objects.all(), label=gettext("Bakterie (wszystkie)")
-        )
-        virus_field_or = ModelMultipleChoiceField(
-            queryset=afflictions_models.Virus.objects.all(), label=gettext("Wirusy (dowolne)")
-        )
-        virus_field_and = ModelMultipleChoiceField(
-            queryset=afflictions_models.Virus.objects.all(), label=gettext("Wirusy (wszystkie)")
-        )
+        gender_field = Patient._meta.get_field("gender").formfield()
+        education_field = Patient._meta.get_field("education").formfield()
+        age_min_field = Patient._meta.get_field("age").formfield()
+        age_max_field = Patient._meta.get_field("age").formfield()
         country_field = Travel._meta.get_field("country").formfield()
+        visit_field = Travel._meta.get_field("visit").formfield()
+        specificity_field = Travel._meta.get_field("specificity").formfield()
 
         first_name_field.label = gettext("Imię pacjenta")
         last_name_field.label = gettext("Nazwisko pacjenta")
+        gender_field.label = gettext("Płeć pacjenta")
+        age_min_field.label = gettext("Wiek pacjenta (minimum)")
+        age_max_field.label = gettext("Wiek pacjenta (maksimum)")
+        education_field.label = gettext("Wykształcenie pacjenta")
         country_field.label = gettext("Kraj podróży")
+        visit_field.label = gettext("Rodzaj wizyty")
+        specificity_field.label = gettext("Stosowana profilaktyka")
+
+        afflictions_qs = afflictions_models.Affliction.objects.all()
+        parasites_qs = afflictions_models.Parasite.objects.all()
+        sickness_qs = afflictions_models.Sickness.objects.all()
+        fungus_qs = afflictions_models.Fungus.objects.all()
+        bacteria_qs = afflictions_models.Bacteria.objects.all()
+        virus_qs = afflictions_models.Virus.objects.all()
+        medicine_qs = afflictions_models.Medicine.objects.all()
+        
+        afflictions_field_or = ModelMultipleChoiceField(queryset=afflictions_qs, label=gettext("Objawy (dowolne)"))
+        afflictions_field_and = ModelMultipleChoiceField(queryset=afflictions_qs, label=gettext("Objawy (wszystkie)"))
+        parasites_field_or = ModelMultipleChoiceField(queryset=parasites_qs, label=gettext("Pasożyty (dowolne)"))
+        parasites_field_and = ModelMultipleChoiceField(queryset=parasites_qs, label=gettext("Pasożyty (wszystkie)"))
+        sickness_field_or = ModelMultipleChoiceField(queryset=sickness_qs, label=gettext("Choroby (dowolne)"))
+        sickness_field_and = ModelMultipleChoiceField(queryset=sickness_qs, label=gettext("Choroby (wszystkie)"))
+        fungus_field_or = ModelMultipleChoiceField(queryset=fungus_qs, label=gettext("Grzyby (dowolne)"))
+        fungus_field_and = ModelMultipleChoiceField(queryset=fungus_qs, label=gettext("Grzyby (wszystkie)"))
+        bacteria_field_or = ModelMultipleChoiceField(queryset=bacteria_qs, label=gettext("Bakterie (dowolne)"))
+        bacteria_field_and = ModelMultipleChoiceField(queryset=bacteria_qs, label=gettext("Bakterie (wszystkie)"))
+        virus_field_or = ModelMultipleChoiceField(queryset=virus_qs, label=gettext("Wirusy (dowolne)"))
+        virus_field_and = ModelMultipleChoiceField(queryset=virus_qs, label=gettext("Wirusy (wszystkie)"))
+
+        # CUSTOM FIELDS
+        travel_time_country_field = Travel._meta.get_field("country").formfield()
+        travel_time_country_field.label = gettext("Czas podróży (kraj)")
+        travel_time_days_min_field = IntegerField(min_value=1, label=gettext("Czas podrózy (minimum dni)"))
+        travel_time_days_max_field = IntegerField(min_value=1, label=gettext("Czas podrózy (maksimum dni)"))
+        fungus_resistance_fungus_field = ModelChoiceField(queryset=fungus_qs, label=gettext("Oporność (grzyb)"))
+        fungus_resistance_medicine_field = ModelChoiceField(queryset=medicine_qs, label=gettext("Oporność (lek)"))
+        fungus_resistance_resistance_field = ChoiceField(
+            choices=(
+                ("", "---------"),
+                (0, gettext("oporny")),
+                (1, gettext("średnio wrażliwy")),
+                (2, gettext("wrażliwy"))
+            ),
+            label=gettext("Oporność (stopień)")
+        )
         return {
+            "patient__first_name": (first_name_field, "icontains"),
+            "patient__last_name": (last_name_field, "icontains"),
+            "patient__gender": (gender_field, "icontains"),
+            "patient__age__gte": (age_min_field, None),
+            "patient__age__lte": (age_min_field, None),
+            "patient__education": (education_field, "icontains"),
             "afflictions__OR": (afflictions_field_or, "in"),
             "afflictions__AND": (afflictions_field_and, "in"),
             "parasites__OR": (parasites_field_or, "in"),
@@ -152,10 +181,33 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
             "viruses__AND": (virus_field_and, "in"),
             "date__gte": (date_from_field, None),
             "date__lte": (date_to_field, None),
-            "patient__first_name": (first_name_field, "icontains"),
-            "patient__last_name": (last_name_field, "icontains"),
             "travels__country": (country_field, "icontains"),
+            "travels__visit": (visit_field, "icontains"),
+            "travels__specificity": (specificity_field, "icontains"),
+            "travel_time_country": (travel_time_country_field, None),
+            "travel_time_days_min": (travel_time_days_min_field, None),
+            "travel_time_days_max": (travel_time_days_max_field, None),
+            "fungus_resistance_fungus": (fungus_resistance_fungus_field, None),
+            "fungus_resistance_medicine": (fungus_resistance_medicine_field, None),
+            "fungus_resistance_resistance": (fungus_resistance_resistance_field, None),
         }
+
+    def custom_filters(self, queryset):
+        travel_time_country = self.request.GET.get("travel_time_country")
+        travel_time_days_min = str_to_int_or_none(self.request.GET.get("travel_time_days_min"))
+        travel_time_days_max = str_to_int_or_none(self.request.GET.get("travel_time_days_max"))
+        if travel_time_country and (travel_time_days_min or travel_time_days_max):
+            queryset = filter_examinations_travel_time(
+                queryset, travel_time_country, travel_time_days_min, travel_time_days_max
+            )
+        fungus_resistance_fungus = str_to_int_or_none(self.request.GET.get("fungus_resistance_fungus"))
+        fungus_resistance_medicine = str_to_int_or_none(self.request.GET.get("fungus_resistance_medicine"))
+        fungus_resistance_resistance = str_to_int_or_none(self.request.GET.get("fungus_resistance_resistance"))
+        if fungus_resistance_fungus and fungus_resistance_medicine:
+            queryset = filter_examinations_fungus_resistance(
+                queryset, fungus_resistance_fungus, fungus_resistance_medicine, fungus_resistance_resistance
+            )
+        return queryset
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -166,6 +218,7 @@ class ExaminationListView(InternMixin, OrderableMixin, SearchableMixin, ListView
             "travels", "morphologies", "morphologies__morphology", "animals",
             "animals__animal", "bacteria__bacteria"
         )
+        queryset = self.custom_filters(queryset)
         return queryset
 
     def build_animals_row(self, examination):
