@@ -55,8 +55,8 @@ class Travel(models.Model):
     date_end = models.DateField(_("koniec"), null=False)
     food = models.PositiveSmallIntegerField(_("odżywianie"), choices=FOOD_CHOICES, null=True, blank=True)
     drinks = models.PositiveSmallIntegerField(_("napoje"), choices=DRINKS_CHOICES, null=True, blank=True)
-    visit = models.PositiveSmallIntegerField(_("rodzaj wizyty"), choices=VISIT_CHOICES, null=True, blank=True)
-    specialist_advice = models.BooleanField(_("Porada specjalistycznej"), null=True, blank=False)
+    visit = models.PositiveSmallIntegerField(_("rodzaj pobytu"), choices=VISIT_CHOICES, null=True, blank=True)
+    specialist_advice = models.BooleanField(_("Porada specjalistyczna"), null=True, blank=False)
     specificity = models.PositiveSmallIntegerField(
         _("Profilaktyka"),
         choices=SPECIFICITY_CHOICES,

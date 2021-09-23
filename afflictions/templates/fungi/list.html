@@ -8,7 +8,7 @@
     <div class="col-xl-12">
     <h1>{% trans 'Grzyby' %}</h1>
     {% if allowed %}
-      <a href="{% url 'fungus_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+      <a href="{% url 'fungus_create' %}"><button class="btn btn-outline-secondary loader-btn">{% trans 'Dodaj' %}</button></a>
     {% endif %}
 
     {% search_form search_form %}
@@ -26,10 +26,10 @@
       {% for fungus in object_list %}
         <tr>
           <th>{{ fungus.name }}</th>
-          <th><a href="{% url 'fungus_detail' pk=fungus.pk %}"><button class="btn btn-primary">{% trans 'Podgląd' %}</button></a></th>
+          <th><a href="{% url 'fungus_detail' pk=fungus.pk %}"><button class="btn btn-primary loader-btn">{% trans 'Podgląd' %}</button></a></th>
           <th>
             {% if allowed %}
-              <a href="{% url 'fungus_delete' pk=fungus.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a>
+              <a href="{% url 'fungus_delete' pk=fungus.pk %}"><button class="btn btn-danger loader-btn">{% trans 'Usuń' %}</button></a>
             {% endif %}
           </th>
         </tr>

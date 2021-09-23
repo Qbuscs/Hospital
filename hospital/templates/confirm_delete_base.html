@@ -8,7 +8,7 @@
         <div class="col-8 text-center">
             <form method="post">{% csrf_token %} 
                 <p>{% trans 'Czy napewno chcesz usunąć' %} "{{ object }}"?</p>
-                <button type="button" class="btn btn-secondary" onclick="history.back()">{% trans 'Wróć' %}</button>
+                <button type="button" class="btn btn-secondary loader-btn" onclick="history.back()">{% trans 'Wróć' %}</button>
                 <button type="submit" class="btn btn-danger">{% trans 'Usuń' %}</button> 
             </form>
         </div>

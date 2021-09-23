@@ -15,8 +15,8 @@
             <p><span class="font-weight-bold">{% trans 'Email' %}:</span> {{ user.email }}</p>
             <p><span class="font-weight-bold">{% trans 'Nr telefonu' %}:</span> {{ user.phone }}</p>
             <p><span class="font-weight-bold">{% trans 'Rola' %}:</span> {{ user.get_role_display }}</p>
-            <a href="{% url 'change_password' %}"><button class="btn btn-primary">{% trans 'Zmień hasło' %}</button></a>
-            <a href="{% url 'profile_edit' %}"><button class="btn btn-primary">{% trans 'Edytuj informacje' %}</button></a>
+            <a href="{% url 'change_password' %}"><button class="btn btn-primary loader-btn">{% trans 'Zmień hasło' %}</button></a>
+            <a href="{% url 'profile_edit' %}"><button class="btn btn-primary loader-btn">{% trans 'Edytuj informacje' %}</button></a>
             </div>
         </div>
 </div>

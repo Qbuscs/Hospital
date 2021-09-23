@@ -49,7 +49,20 @@ class MedicineExamination(models.Model):
 
     def __str__(self):
         days = self.intake_time if self.intake_time else "???"
-        return str(self.medicine) + f" - {days} " + gettext("dni") 
+        return str(self.medicine) + f" - {days} " + gettext("dni")
+
+
+class Vaccine(models.Model):
+    sickness = models.ForeignKey(
+        Sickness, verbose_name=_("choroba"), null=False, blank=False, unique=True, on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return gettext("szczepienie przeciw - ") + self.sickness.name
+
+    class Meta:
+        verbose_name = _("szczepionka")
+        verbose_name_plural = _("szpionki")
 
 
 class SicknessExamination(models.Model):

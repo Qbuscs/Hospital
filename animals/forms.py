@@ -13,5 +13,5 @@ class AnimalExaminationForm(forms.ModelForm):
 
 AnimalExaminationFormSet = inlineformset_factory(
     Examination, AnimalExamination, form=AnimalExaminationForm,
-    fields=["animal", "contact", "saliva", "excrement", "blood", "scratches"], extra=1, can_delete=True
+    fields=["animal", "contact", "saliva", "excrement", "blood", "scratches", "skin"], extra=1, can_delete=True
 )

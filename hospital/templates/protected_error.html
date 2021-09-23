@@ -1,0 +1,18 @@
+{% extends "base.html" %}   
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-8 text-center">
+            <form method="post">{% csrf_token %} 
+                <h5>{% trans 'Wystąpił błąd' %}</h5>
+                <p>{% trans 'Obiekt który próbujesz usunąć jest używany przez inne rekordy w systemie. Usuń je lub ich powiązania z danym obiektem.' %}</p>
+                <button type="button" class="btn btn-secondary loader-btn" onclick="history.go(-2)">{% trans 'Wróć' %}</button>
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock content %}

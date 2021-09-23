@@ -26,10 +26,10 @@
           {% endif %}
         </tbody>
       </table>
-      <a href="{% url 'sickness_list' %}"><button class="btn btn-secondary">{% trans 'Wróć' %}</button></a>
+      <a href="{% url 'sickness_list' %}"><button class="btn btn-secondary loader-btn">{% trans 'Wróć' %}</button></a>
       {% has_doctor_rights user as allowed %}
       {% if allowed %}
-        <a href="{% url 'sickness_update' pk=object.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a>
+        <a href="{% url 'sickness_update' pk=object.pk %}"><button class="btn btn-primary loader-btn">{% trans 'Edytuj' %}</button></a>
       {% endif %}
     </div>
   </div>

@@ -8,7 +8,7 @@
     <div class="col-xl-12">
     <h1>{% trans 'Pasożyty' %}</h1>
     {% if allowed %}
-      <a href="{% url 'parasite_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+      <a href="{% url 'parasite_create' %}"><button class="btn btn-outline-secondary loader-btn">{% trans 'Dodaj' %}</button></a>
     {% endif %}
 
     {% search_form search_form %}
@@ -38,10 +38,10 @@
               {{ affliction }}<br>
             {% endfor %}
           </th>
-          <th><a href="{% url 'parasite_detail' pk=parasite.pk %}"><button class="btn btn-primary">{% trans 'Podgląd' %}</button></a></th>
+          <th><a href="{% url 'parasite_detail' pk=parasite.pk %}"><button class="btn btn-primary loader-btn">{% trans 'Podgląd' %}</button></a></th>
           <th>
             {% if allowed %}
-              <a href="{% url 'parasite_delete' pk=parasite.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a>
+              <a href="{% url 'parasite_delete' pk=parasite.pk %}"><button class="btn btn-danger loader-btn">{% trans 'Usuń' %}</button></a>
             {% endif %}
           </th>
         </tr>

@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-xl-12">
         <h1>{% trans 'Użytkownicy' %}</h1>
-        <a href="{% url 'user_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+        <a href="{% url 'user_create' %}"><button class="btn btn-outline-secondary loader-btn">{% trans 'Dodaj' %}</button></a>
 
         {% search_form search_form %}
 
@@ -38,7 +38,7 @@
                     {% if request.user == user %}
                         <td></td>
                     {% else %}
-                        <td><a href="{% url 'user_delete' pk=user.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a></td>
+                        <td><a href="{% url 'user_delete' pk=user.pk %}"><button class="btn btn-danger loader-btn">{% trans 'Usuń' %}</button></a></td>
                     {% endif %}
                 </tr>
             {% endfor %}

@@ -63,7 +63,6 @@
   function calcPointsinPolygons(pointsource,polygonsource)
   {
  // point in polygon:
-    console.log("choro start")
     var parser = new jsts.io.olParser();
     var pointFeatures = pointsource.getFeatures();
     var polygonFeatures = polygonsource.getFeatures();
@@ -77,9 +76,6 @@
         jstsPolygons[i]=parser.read(polygonFeatures[i].getGeometry());
         //alert(jstsPolygons[i]);
     }
-    console.log("choro converted")
-
-    console.log(polygonFeatures[177]);
 
     for (var i=0; i<pointFeatures.length;i++)
     {
@@ -90,11 +86,8 @@
     var numPointsinPolys = new Array(jstsPolygons.length);
     var maxPoints = 0;
     var pointsMatched = 0;
-    console.log(jstsPolygons.length);
-    console.log(jstsPoints.length);
     for (var i=0; i<jstsPolygons.length;i++)
     {
-        console.log(i, "/", jstsPolygons.length);
         numPointsinPolys[i]=0;
         for (var j=0; j<jstsPoints.length;j++)
         {
@@ -111,8 +104,6 @@
         if (numPointsinPolys[i]>maxPoints)
             maxPoints=numPointsinPolys[i];
     }
-    console.log("choro counted")
-    console.log("Points unmatched = ", jstsPoints.length-pointsMatched);
 
 
     maxPointsperPolygon=maxPoints;
@@ -139,6 +130,5 @@
     });
 
     //map.addLayer(resultlayer);
-    console.log("choro done")
     return resultlayer;
   }

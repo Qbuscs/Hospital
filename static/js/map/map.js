@@ -1,4 +1,6 @@
 function loadMap(){
+  let date = new Date();
+  let start = date.getTime();
 
   $("#map").css("display", "block");
   $("#wait-message").css("display", "block");
@@ -91,11 +93,12 @@ function loadMap(){
       var choropleth = calcPointsinPolygons(patients,countries);
       overlayGroup.getLayers().push(choropleth);
       $("#wait-message").css("display", "none");
+      date = new Date();
+      console.log("Time [ms] = " + (date.getTime() - start));
   }
 
   var sourceEventListener = countries.once('change', function(e) {
     if (countries.getState() == 'ready') {
-    console.log('GeoJSON loaded');
     choroMap();
     countries.un('change', sourceEventListener);
     }

@@ -8,7 +8,7 @@
     <div class="col-xl-12">
       <h1>{% trans 'Choroby' %}</h1>
       {% if allowed %}
-        <a href="{% url 'sickness_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+        <a href="{% url 'sickness_create' %}"><button class="btn btn-outline-secondary loader-btn">{% trans 'Dodaj' %}</button></a>
       {% endif %}
 
       {% search_form search_form %}
@@ -26,9 +26,9 @@
         {% for sickness in object_list %}
           <tr>
             <th>{{ sickness.name }}</th>
-            <th><a href="{% url 'sickness_detail' pk=sickness.pk %}"><button class="btn btn-primary">{% trans 'Podgląd' %}</button></a></th>
+            <th><a href="{% url 'sickness_detail' pk=sickness.pk %}"><button class="btn btn-primary loader-btn">{% trans 'Podgląd' %}</button></a></th>
             {% if allowed %}
-              <th><a href="{% url 'sickness_delete' pk=sickness.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a></th>
+              <th><a href="{% url 'sickness_delete' pk=sickness.pk %}"><button class="btn btn-danger loader-btn">{% trans 'Usuń' %}</button></a></th>
             {% else %}
               <th></th>
             {% endif %}

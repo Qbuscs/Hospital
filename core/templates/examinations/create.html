@@ -13,9 +13,9 @@
         <div class="card">
             <div class="card-header">
                 {% if operation == "create" %}
-                    {% trans "Zarejestruj badanie" %}
+                    {% trans "Zarejestruj wywiad medyczny / badanie" %}
                 {% elif operation == "edit" %}
-                    {% trans "Edytuj badanie" %}
+                    {% trans "Edytuj wywiad medyczny / badanie" %}
                 {% endif %}
             </div>
             <div class="card-body">
@@ -31,6 +31,7 @@
 {% select2ify "id_afflictions" %}
 {% select2ify "id_parasites" %}
 {% select2ify "id_viruses" %}
+{% select2ify "id_vaccines" %}
 {% select2ify_like "resistance" %}
 <script>
 $ (document).ready( function() {
@@ -59,6 +60,8 @@ $("a[class='add-row']").click(function(){
             $("<br>").insertAfter(this);
         }
     })
-})
+});
+$("label[for='id_vaccines']").empty();
+$("<legend>Szczepienia</legend>").insertBefore("div[id='div_id_vaccines']");
 </script>
 {% endblock %}

@@ -3,15 +3,11 @@ from django.contrib import admin
 from afflictions.admin import SicknessExaminationInlineAdmin, FungusExaminationInlineAdmin
 from animals.admin import AnimalExaminationAdmin
 from travels.admin import TravelInlineAdmin
-from .models import Patient, Examination
-
-
-class PatientAdmin(admin.ModelAdmin):
-    list_display = ["first_name", "last_name"]
+from .models import Examination
 
 
 class ExaminationAdmin(admin.ModelAdmin):
-    list_display = ['patient', 'date']
+    list_display = ['date']
     inlines = [
         AnimalExaminationAdmin,
         TravelInlineAdmin,
@@ -20,5 +16,4 @@ class ExaminationAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Patient, PatientAdmin)
 admin.site.register(Examination, ExaminationAdmin)

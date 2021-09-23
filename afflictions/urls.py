@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import (affliction_views, bacteria_views, fungus_views,
                     medicine_views, parasite_views, sickness_views,
-                    virus_views)
+                    virus_views, vaccine_views)
 
 urlpatterns = [
     path("afflictions/", affliction_views.AfflictionListView.as_view(), name="affliction_list"),
@@ -44,4 +44,9 @@ urlpatterns = [
     path("viruses/<pk>/", virus_views.VirusDetailView.as_view(), name="virus_detail"),
     path("viruses/<pk>/delete/", virus_views.VirusDeleteView.as_view(), name="virus_delete"),
     path("viruses/<pk>/edit/", virus_views.VirusUpdateView.as_view(), name="virus_update"),
+
+    path("vaccines/", vaccine_views.VaccineListView.as_view(), name="vaccine_list"),
+    path("vaccine/create/", vaccine_views.VaccineCreateView.as_view(), name="vaccine_create"),
+    path("vaccine/<pk>/delete/", vaccine_views.VaccineDeleteView.as_view(), name="vaccine_delete"),
+    path("vaccine/<pk>/edit/", vaccine_views.VaccineUpdateView.as_view(), name="vaccine_update"),
 ]

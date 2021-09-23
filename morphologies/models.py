@@ -14,8 +14,8 @@ class Morphology(models.Model):
         return f"{self.name} ({self.norm_min}-{self.norm_max} {self.unit})"
 
     class Meta:
-        verbose_name = _("Badanie morfologiczne")
-        verbose_name_plural = _("Badania morfologiczne")
+        verbose_name = _("Badanie laboratoryjne")
+        verbose_name_plural = _("Badania laboratoryjne")
 
 
 class MorphologyExamination(models.Model):
@@ -23,7 +23,7 @@ class MorphologyExamination(models.Model):
     MORPHOLOGY_NORMAL = 1
     MORPHOLOGY_HIGH = 2
 
-    morphology = models.ForeignKey(Morphology, verbose_name=_("Badanie morfologiczne"), on_delete=models.PROTECT)
+    morphology = models.ForeignKey(Morphology, verbose_name=_("Badanie laboratoryjne"), on_delete=models.PROTECT)
     examination = models.ForeignKey(
         Examination, related_name="morphologies", verbose_name=_("Badanie"), on_delete=models.CASCADE
     )
@@ -49,5 +49,5 @@ class MorphologyExamination(models.Model):
 
     class Meta:
         unique_together = ("morphology", "examination")
-        verbose_name = _("Wynik morfologii")
-        verbose_name_plural = _("Wyniki morfologii")
+        verbose_name = _("Wynik badania laboratoryjnego")
+        verbose_name_plural = _("Wyniki badań laboratoryjnych")

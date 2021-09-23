@@ -69,6 +69,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    'hospital.middleware.ExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'hospital.urls'
@@ -161,9 +163,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    str(BASE_DIR.joinpath("static")),
-)
+if DEBUG:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = reverse_lazy("login")
 LOGIN_REDIRECT_URL = "/"

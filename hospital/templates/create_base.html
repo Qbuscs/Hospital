@@ -11,12 +11,12 @@
         </div>
         <div class="card-body">
             <div class="col-8">
-                <form method="POST" enctype="multipart/form-data" autocomplete="off"> 
+                <form id="create-form" method="POST" enctype="multipart/form-data" autocomplete="off"> 
                     {% block form %}
                     {% csrf_token %} 
                     {% bootstrap_form form %} 
                     <button type="submit" class="btn btn-primary">{% trans 'Zapisz' %}</button>
-                    <button type="button" class="btn btn-secondary" onclick="history.back()">{% trans 'Wróć' %}</button>
+                    <button type="button" class="btn btn-secondary loader-btn" onclick="history.back()">{% trans 'Wróć' %}</button>
                     {% endblock %}
                 </form>
             </div>

@@ -8,10 +8,14 @@
       <div class="col-xl-12">
         <h3>{% trans "Badanie" %}</h3>
 
-        <p><span class="font-weight-bold">{% trans "Pacjent" %}: </span>{{ object.patient }}</p>
-
         <p><span class="font-weight-bold">{% trans "Data" %}: </span>{{ object.date }}</p>
 
+        <p><span class="font-weight-bold">{% trans "Pacjent" %}: </span> </br>
+          {% trans "Wiek: " %} {{ object.patient_age }} {% trans "lat" %} </br>
+          {% trans "Wykształcenie: " %} {{ object.get_patient_education_display }}</br>
+          {% trans "Płeć: " %} {{ object.get_patient_gender_display }} </br>
+        </p>
+        
         <p><span class="font-weight-bold">{% trans "Objawy" %}: </span>
           {% if not object.afflictions.exists %}{% trans "Brak" %}</p>
           {% else %}</p>
@@ -193,12 +197,13 @@
         <table class="table table-sm">
             <thead class="thead-dark">
               <tr>
-                <th width="16.6%">{% trans "Zwierzę" %}</th>
-                <th width="16.6%">{% trans "Rodzaj kontaktu" %}</th>
-                <th width="16.6%">{% trans "Kontakt ze śliną" %}</th>
-                <th width="16.6%">{% trans "Kontakt z odchodami" %}</th>
-                <th width="16.6%">{% trans "Kontakt z krwią" %}</th>
-                <th width="16.6%">{% trans "Podrapania" %}</th>
+                <th>{% trans "Zwierzę" %}</th>
+                <th>{% trans "Rodzaj kontaktu" %}</th>
+                <th>{% trans "Kontakt ze śliną" %}</th>
+                <th>{% trans "Kontakt z odchodami" %}</th>
+                <th>{% trans "Kontakt z krwią" %}</th>
+                <th>{% trans "Podrapania" %}</th>
+                <th>{% trans "Kontakt z sierścią / skórą" %}</th>
               </tr>
             </thead>
             <tbody>
@@ -210,6 +215,7 @@
                       <td>{% bool_unknown "" animal.excrement %}</td>
                       <td>{% bool_unknown "" animal.blood %}</td>
                       <td>{% bool_unknown "" animal.scratches %}</td>
+                      <td>{% bool_unknown "" animal.skin %}</td>
                   </tr>
                   {% endfor %}
             </tbody>
@@ -227,7 +233,7 @@
                 <th>{% trans "Koniec" %}</th>
                 <th>{% trans "Odżywianie" %}</th>
                 <th>{% trans "Napoje" %}</th>
-                <th>{% trans "Rodzaj" %}</th>
+                <th>{% trans "Rodzaj pobytu" %}</th>
                 <th>{% trans "Korzystanie z porady specjalistycznej" %}</th>
                 <th>{% trans "Stosowanie profilaktyki" %}</th>
               </tr>
@@ -301,9 +307,9 @@
         {% endif %}
         </p>
 
-        <a href="{% url 'examination_list' %}"><button class="btn btn-secondary">{% trans 'Wróć' %}</button></a>
+        <a href="{% url 'examination_list' %}"><button class="btn btn-secondary loader-btn">{% trans 'Wróć' %}</button></a>
         {% if allowed %}
-          <a href="{% url 'examination_update' pk=object.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a>
+          <a href="{% url 'examination_update' pk=object.pk %}"><button class="btn btn-primary loader-btn">{% trans 'Edytuj' %}</button></a>
         {% endif %}
         </div>
     </div>

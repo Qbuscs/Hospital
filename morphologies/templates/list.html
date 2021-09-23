@@ -6,9 +6,9 @@
 <div class="container">
   <div class="row">
     <div class="col-xl-12">
-      <h1>{% trans 'Badania morfologiczne' %}</h1>
+      <h1>{% trans 'Badania laboratoryjne' %}</h1>
       {% if allowed %}
-        <a href="{% url 'morphology_create' %}"><button class="btn btn-outline-secondary">{% trans 'Dodaj' %}</button></a>
+        <a href="{% url 'morphology_create' %}"><button class="btn btn-outline-secondary loader-btn">{% trans 'Dodaj' %}</button></a>
       {% endif %}
 
       {% search_form search_form %}
@@ -34,8 +34,8 @@
             <th>{{ morphology.norm_min }}</th>
             <th>{{ morphology.norm_max }}</th>
             {% if allowed %}
-              <th><a href="{% url 'morphology_update' pk=morphology.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a></th>
-              <th><a href="{% url 'morphology_delete' pk=morphology.pk %}"><button class="btn btn-danger">{% trans 'Usuń' %}</button></a></th>
+              <th><a href="{% url 'morphology_update' pk=morphology.pk %}"><button class="btn btn-primary loader-btn">{% trans 'Edytuj' %}</button></a></th>
+              <th><a href="{% url 'morphology_delete' pk=morphology.pk %}"><button class="btn btn-danger loader-btn">{% trans 'Usuń' %}</button></a></th>
             {% else %}
               <th></th>
               <th></th>

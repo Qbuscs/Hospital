@@ -21,8 +21,10 @@ class ExaminationForm(forms.ModelForm):
         self.helper.field_class = "col-md-9"
         self.helper.layout = Layout(
             Div(
-                Field("patient"),
                 Field("date", autocomplete="off"),
+                Field("patient_age"),
+                Field("patient_gender"),
+                Field("patient_education"),
                 Field("afflictions", style="width: 100%"),
                 Field("parasites", style="width: 100%"),
                 Field("viruses", style="width: 100%"),
@@ -50,8 +52,11 @@ class ExaminationForm(forms.ModelForm):
                     Div(Fieldset(_("Podróże"), Formset("travels")), css_class="card-body table-responsive table-body"),
                     css_class="card"
                 ),
+                HTML("<br>"),
+                Field("vaccines", style="width: 100%"),
+                HTML("<br>"),
                 Div(
-                    Div(Fieldset(_("Badania morfologiczne"), Formset("morphologies")), css_class="card-body table-responsive table-body"),
+                    Div(Fieldset(_("Badania laboratoryjne"), Formset("morphologies")), css_class="card-body table-responsive table-body"),
                     css_class="card"
                 ),
                 Field("collagen_layer_thickening"),
@@ -65,7 +70,7 @@ class ExaminationForm(forms.ModelForm):
                 HTML("<br>"),
                 ButtonHolder(
                     Submit("submit", _("Zapisz")),
-                    HTML(_('<button type="button" class="btn btn-secondary" onclick="history.back()">Wróć</button>'))
+                    HTML(_('<button type="button" class="btn btn-secondary loader-btn" onclick="history.back()">Wróć</button>'))
                 )
             )
         )

@@ -7,9 +7,9 @@
     <div class="row">
       <div class="col-xl-12">
         <h3>{{ object }}</h3>
-        <a href="{% url 'virus_list' %}"><button class="btn btn-secondary">{% trans 'Wróć' %}</button></a>
+        <a href="{% url 'virus_list' %}"><button class="btn btn-secondary loader-btn">{% trans 'Wróć' %}</button></a>
         {% if allowed %}
-          <a href="{% url 'virus_update' pk=object.pk %}"><button class="btn btn-primary">{% trans 'Edytuj' %}</button></a>
+          <a href="{% url 'virus_update' pk=object.pk %}"><button class="btn btn-primary loader-btn">{% trans 'Edytuj' %}</button></a>
         {% endif %}
         </div>
     </div>
