@@ -25,7 +25,7 @@ SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'vu#=sc87(-sk8k@m!k7xakryxtk@()s41yqnkgu9g^w%5c1wp^'
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -113,9 +113,9 @@ DATE_INPUT_FORMATS = ["%d/%m/%Y"]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Hospital',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'NAME': os.environ["DB_NAME"],
+        'USER': os.environ["DB_USER"],
+        'PASSWORD': os.environ["DB_PASSWORD"],
         'HOST': 'localhost',
         'PORT': '5432',
     }
